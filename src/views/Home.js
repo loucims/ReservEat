@@ -11,8 +11,12 @@ const Map = () => {
             <MapView provider={PROVIDER_GOOGLE} customMapStyle={mainMapStyle} style={styles.map}>
 
             </MapView>
-            <View style={styles.statusBar}>
-                <Image source={require("../../assets/icons/Location and Map/map.png")} width={40} height={40}/>
+            <View style={styles.statusBarView}>
+                <View style={styles.statusBar}>
+                    <Image source={require("../../assets/icons/statusBar/map.png")} style={styles.icon}/>
+                    <Image source={require("../../assets/icons/statusBar/reserves.png")} style={styles.icon}/>
+                    <Image source={require("../../assets/icons/statusBar/user.png")} style={styles.icon}/>
+                </View>
             </View>
         </View>
     );
@@ -21,19 +25,26 @@ const Map = () => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
       alignItems: 'center',
     },
     map: {
       width: '100%',
       height: '90%' 
     },
-    statusBar: {
+    statusBarView: {
         backgroundColor: colors.black,
         width: '100%',
         height: '100%',
+    },
+    statusBar: {
         flexDirection:'row',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-around',
+        alignItems: 'baseline',
+        marginTop: 25
+    },
+    icon: {
+        width: 30,
+        height: 30
     }
   });
 

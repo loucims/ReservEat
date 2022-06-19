@@ -1,6 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
+//import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Platform } from 'react-native';
+import { StyleSheet, SafeAreaView, Platform} from 'react-native';
 import { StatusBar as StatusBarNative } from 'react-native';
 import { colors } from './src/utils/colors';
 //----------------------------------------------------\\
@@ -14,7 +14,6 @@ const App = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Map/>
-      <StatusBar style="auto" />
     </SafeAreaView>
   );
 }
@@ -22,8 +21,9 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.black,
     padding: Platform.OS === 'android' ? StatusBarNative.currentHeight : 0
-  },
+  }
 });
 
 export default App;
