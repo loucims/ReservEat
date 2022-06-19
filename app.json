@@ -18,7 +18,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.app.reserveat",
+      "config": {
+        "googleMapsApiKey": "AIzaSyA0fUmmqdlLePAJIdnqmQcA68OPKZNf6sg"
+      }
     },
     "android": {
       "adaptiveIcon": {

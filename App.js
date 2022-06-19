@@ -6,12 +6,14 @@ import { colors } from './src/utils/colors';
 //----------------------------------------------------\\
 import SplashView from './src/views/Splash';
 import LogInView from './src/views/LogIn';
+import RegisterView from './src/views/Register';
+import Map from './src/views/Home';
 
 
 const App = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <LogInView/>
+      <Map/>
       <StatusBar style="auto" />
     </SafeAreaView>
   );
