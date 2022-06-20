@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, TouchableWithoutFe
 import { colors } from '../utils/colors';
 import { useFonts } from 'expo-font';
 
-const LogInView = () =>{
+const LogInView = ({navigation}) =>{
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     
@@ -20,17 +20,20 @@ const LogInView = () =>{
                     <View style={styles.line} marginBottom={120}/>
     
     
-                    <TouchableOpacity style={styles.button}> 
+                    <TouchableOpacity style={styles.button} onPress={() =>{
+                        navigation.navigate("Home")
+                    }}> 
                         <Text style={styles.buttonText}>Confirmar</Text>
                     </TouchableOpacity>
                     <View flexDirection={'row'}>
                         <Text style={styles.text}>No tienes una cuenta?&nbsp;</Text>
-                        <TouchableOpacity> 
+                        <TouchableOpacity onPress={() =>{
+                            navigation.navigate("Register")
+                        }}> 
                             <Text style={styles.registerText}>Registrate</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-              <StatusBar style="auto" />
             </View>
         </TouchableWithoutFeedback>
 

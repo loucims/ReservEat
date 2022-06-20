@@ -7,7 +7,7 @@ import { restaurantsMapInfo } from '../utils/coordinates';
 import { mainMapStyle } from '../utils/mapStyle';
 import { colors } from '../utils/colors';
 
-const Map = () => {
+const Map = ({navigation}) => {
 
     const [initialRegion, setInitialRegion] = useState({
         latitude: 0,
@@ -68,7 +68,9 @@ const Map = () => {
         initialRegion={initialRegion}>
         {restaurantsMapInfo.restaurants.map(restaurant => (
             <Marker key={restaurant.name} coordinate={restaurant.cords} onPress={() => focusOnMarker(restaurant.cords)}>
-                <Callout flexDirection={'row'} alignItems={'center'}>
+                <Callout flexDirection={'row'} alignItems={'center'} onPress={() =>{
+                    navigation.navigate("Restaurant", {restaurant});
+                }}>
                     <Image source={require("../../assets/testbuti.jpg")} style={styles.icon}/>
                     <Text fontFamily={'Aveni-Heavy'}>{restaurant.name}</Text>
                 </Callout>

@@ -3,32 +3,31 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../utils/colors';
 
-const SplashView = () =>{
+const SplashView = ({ navigation }) =>{
+  
+  delayId = setTimeout(() =>{
+    navigation.navigate("LogIn")
+  }, 3000)
 
-    useEffect(() =>{
-    },[]);
+  return (
+    <View style={styles.container}>
+      <Text style={styles.splashText}>ReservEat</Text>
+    </View>
+  );
+}
   
-  
-    return (
-      <View style={styles.container}>
-        <Text style={styles.splashText}>ReservEat</Text>
-        <StatusBar style="auto" />
-      </View>
-    );
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  splashText: {
+    fontSize: 40,
+    fontFamily: 'Avenir-Heavy',
+    color: colors.black
   }
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    splashText: {
-      fontSize: 40,
-      fontFamily: 'Avenir-Heavy',
-      color: colors.black
-    }
 });
 
 export default SplashView;

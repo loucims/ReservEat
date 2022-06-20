@@ -5,7 +5,7 @@ import Map from '../components/Map';
 import { foodCategories } from '../utils/categories';
 import { colors } from '../utils/colors';
 
-const Home = () => {
+const HomeView = ({navigation}) => {
     const [searchField, setSearchField] = useState('');
 
 
@@ -23,13 +23,13 @@ const Home = () => {
                 </View>
                 <ScrollView style={styles.scrollDiscoveryBar} horizontal={true} alignItems={'center'}>
                     {foodCategories.categories.map(category =>(
-                        <TouchableOpacity style={styles.categoryButton}>
-                        <Text key={category.name}style={styles.category}>{category.name}</Text>
+                        <TouchableOpacity key={category.name} style={styles.categoryButton}>
+                            <Text style={styles.category}>{category.name}</Text>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
             </View>
-            <Map/> 
+            <Map navigation={navigation}/> 
             <View style={styles.statusBarView}>
                 <View style={styles.statusBar}>
                     <Image source={require("../../assets/icons/statusBar/map-pressed.png")} style={styles.icon}/>
@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
     },
     discoveryBarView: {
         width: '100%',
-        height: '13%'
+        height: '13%',
+        backgroundColor: colors.black
     },
     discoveryBar: {
         flexDirection:'row',
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
     statusBarView: {
         backgroundColor: colors.black,
         width: '100%',
+        height: '10%'
     },
     statusBar: {
         flexDirection:'row',
@@ -103,4 +105,4 @@ const styles = StyleSheet.create({
     },
   });
 
-export default Home;
+export default HomeView;

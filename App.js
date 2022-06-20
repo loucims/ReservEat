@@ -2,13 +2,19 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, Platform} from 'react-native';
 import { StatusBar as StatusBarNative } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
 //----------------------------------------------------\\
 import { colors } from './src/utils/colors';
 import SplashView from './src/views/Splash';
 import LogInView from './src/views/LogIn';
 import RegisterView from './src/views/Register';
-import Home from './src/views/Home';
+import HomeView from './src/views/Home';
+import RestaurantView from './src/views/Restaurant';
+
+
+const Stack = createNativeStackNavigator()
 
 
 const App = () => {
@@ -19,10 +25,23 @@ const App = () => {
   if (!loaded){
       return null
   }
-
   return (
     <SafeAreaView style={styles.container}>
-      <Home/>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{
+          headerShown: false
+        }}>
+          <Stack.Screen name={"Splash"} component={SplashView}/>
+          
+          <Stack.Screen name={"LogIn"} component={LogInView}/>
+          
+          <Stack.Screen name={"Register"} component={RegisterView}/>
+          
+          <Stack.Screen name={"Restaurant"} component={RestaurantView}/>
+          
+          <Stack.Screen name={"Home"} component={HomeView}/>
+        </Stack.Navigator>
+      </NavigationContainer>
     </SafeAreaView>
   );
 }
