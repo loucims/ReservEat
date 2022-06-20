@@ -2,18 +2,27 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, Platform} from 'react-native';
 import { StatusBar as StatusBarNative } from 'react-native';
-import { colors } from './src/utils/colors';
+import { useFonts } from 'expo-font';
 //----------------------------------------------------\\
+import { colors } from './src/utils/colors';
 import SplashView from './src/views/Splash';
 import LogInView from './src/views/LogIn';
 import RegisterView from './src/views/Register';
-import Map from './src/views/Home';
+import Home from './src/views/Home';
 
 
 const App = () => {
+  const [loaded] = useFonts({
+    'Aveni-Heavy': require('./assets/fonts/Avenir/Metropolis-SemiBold.otf'),
+    'Aveni-Medium': require('./assets/fonts/Avenir/Metropolis-Medium.otf'),
+  })
+  if (!loaded){
+      return null
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <Map/>
+      <Home/>
     </SafeAreaView>
   );
 }

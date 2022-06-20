@@ -1,54 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Dimensions, View, Image } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { useFonts } from 'expo-font';
-import * as Location from 'expo-location';
+import React, { useState, useEffect, useRef } from 'react';
+import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 //----------------------------------------------------------\\
-import { mainMapStyle } from '../utils/mapStyle';
+import Map from '../components/Map';
+import { foodCategories } from '../utils/categories';
 import { colors } from '../utils/colors';
 
-const Map = () => {
+const Home = () => {
+    const [searchField, setSearchField] = useState('');
 
-    useEffect(() => {
-        locateCurrentPos();
-    },[]);
-
-    const [position, setPosition] = useState({});
-
-    locateCurrentPos = async () => {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted'){
-            console.log("ouch, you really did that to me, i thought we had something");
-            return;
-        }
-        /*Location.watchPositionAsync({
-            accuracy: Location.Accuracy.High,
-            distanceInterval: 2
-        }, locationObj =>{
-            console.log(locationObj);
-            setLocation(locationObj);
-        });*/
-        let loc = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.High})
-        Object.keys(position).length ? console.log('true') : console.log('false')
-        console.log(position.keys)
-        setPosition(loc);
-        
-        console.log(position.keys)
-        Object.keys(position).length > 0 ? console.log('true') : console.log('false')
-    }
 
     return(
         <View style={styles.container}>
-            <MapView 
-            provider={PROVIDER_GOOGLE} 
-            customMapStyle={mainMapStyle} style={styles.map} 
-            showsUserLocation={true} showsMyLocationButton={true} 
-            initialRegion={position ? {latitude: 0, longitude:0, latitudeDelta: 0, longitudeDelta: 0} : {}}>
-
-            </MapView>
+            
+            <View style={styles.discoveryBarView}>
+                <View style={styles.discoveryBar}>
+                    <Image source={require("../../assets/icons/discoveryBar/search.png")} style={styles.searchIcon} marginHorizontal={20} marginTop={15}/>
+                    <View>
+                        <TextInput onChangeText={(input) =>{setSearchField(input)}} style={styles.input} 
+                        fontSize={20} placeholder="Buscar.." placeholderTextColor={colors.white}/>
+                        <View style={styles.line}/>
+                    </View>
+                </View>
+                <ScrollView style={styles.scrollDiscoveryBar} horizontal={true} alignItems={'center'}>
+                    {foodCategories.categories.map(category =>(
+                        <TouchableOpacity style={styles.categoryButton}>
+                        <Text key={category.name}style={styles.category}>{category.name}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
+            </View>
+            <Map/> 
             <View style={styles.statusBarView}>
                 <View style={styles.statusBar}>
-                    <Image source={require("../../assets/icons/statusBar/map.png")} style={styles.icon}/>
+                    <Image source={require("../../assets/icons/statusBar/map-pressed.png")} style={styles.icon}/>
                     <Image source={require("../../assets/icons/statusBar/reserves.png")} style={styles.icon}/>
                     <Image source={require("../../assets/icons/statusBar/user.png")} style={styles.icon}/>
                 </View>
@@ -62,14 +46,34 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
     },
-    map: {
-      width: '100%',
-      height: '90%' 
+    discoveryBarView: {
+        width: '100%',
+        height: '13%'
+    },
+    discoveryBar: {
+        flexDirection:'row',
+        marginTop: 10
+    },
+    scrollDiscoveryBar: {
+        width: '100%',
+        height: '13%'  
+    },
+    categoryButton: {
+        backgroundColor: colors.white,
+        borderRadius: 50,
+        width: 100,
+        height: 30,
+        marginHorizontal: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    category: {
+        fontFamily: 'Aveni-Heavy',
+        color: colors.black
     },
     statusBarView: {
         backgroundColor: colors.black,
         width: '100%',
-        height: '100%',
     },
     statusBar: {
         flexDirection:'row',
@@ -80,7 +84,23 @@ const styles = StyleSheet.create({
     icon: {
         width: 30,
         height: 30
-    }
+    },
+    searchIcon:{
+        width: 24,
+        height: 24
+    },
+    line: {
+        backgroundColor: colors.white,
+        width: 325,
+        height: 1
+    },
+    input: {
+        width: 300,
+        height: 55,
+        marginBottom: -10,
+        color: colors.white,
+        fontFamily: 'Aveni-Medium'
+    },
   });
 
-export default Map;
+export default Home;

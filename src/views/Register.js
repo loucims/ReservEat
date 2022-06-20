@@ -5,18 +5,10 @@ import { colors } from '../utils/colors';
 import { useFonts } from 'expo-font';
 
 const RegisterView = () =>{
-    const [loaded] = useFonts({
-        'Aveni-Heavy': require('../../assets/fonts/Avenir/Metropolis-SemiBold.otf'),
-        'Aveni-Medium': require('../../assets/fonts/Avenir/Metropolis-Medium.otf'),
-    })
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passConfirm, setPassConfirm] = useState("");
-
-    if (!loaded){
-        return null
-    }
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

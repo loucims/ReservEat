@@ -5,16 +5,9 @@ import { colors } from '../utils/colors';
 import { useFonts } from 'expo-font';
 
 const LogInView = () =>{
-    const [loaded] = useFonts({
-        'Aveni-Heavy': require('../../assets/fonts/Avenir/Metropolis-SemiBold.otf'),
-        'Aveni-Medium': require('../../assets/fonts/Avenir/Metropolis-Medium.otf'),
-    })
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-
-    if (!loaded){
-        return null
-    }
+    
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
