@@ -14,11 +14,16 @@ const LogInView = ({navigation}) =>{
             <View style={styles.container}>
                 <Text style={styles.title}>ReservEat</Text>
                 <View style={styles.backdrop}>
-                    <TextInput onChangeText={(input) =>{setUsername(input)}} style={styles.input} fontSize={username ? 17 : 20} marginBottom={-5} placeholder="Email" placeholderTextColor={colors.white}/>
-                    <View style={styles.line} marginBottom={120}/>
-                    <TextInput secureTextEntry={true} onChangeText={(input) =>{setPassword(input)}} style={styles.input} fontSize={password ? 19 : 20} marginBottom={-5} placeholder="Password" placeholderTextColor={colors.white}/>
-                    <View style={styles.line} marginBottom={120}/>
-    
+                    <View style={styles.inputField} marginBottom={50}>
+                        <TextInput onChangeText={(input) =>{setUsername(input)}} style={styles.input} fontSize={username ? 17 : 20} marginBottom={-5} placeholder="Email" placeholderTextColor={colors.white}/>
+                        <View style={styles.line} marginLeft={15}/>
+                    </View>
+                    <View style={styles.inputField} marginBottom={50}>
+                        <TextInput secureTextEntry={true} onChangeText={(input) =>{setPassword(input)}} style={styles.input} fontSize={password ? 19 : 20} marginBottom={-5} placeholder="Password" placeholderTextColor={colors.white}/>
+                        <View style={styles.line} marginLeft={15}/>
+                    </View>
+
+                    <Text style={styles.text}>or</Text>
     
                     <TouchableOpacity style={styles.button} onPress={() =>{
                         navigation.navigate("Home")

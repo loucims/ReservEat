@@ -5,14 +5,14 @@ import { restaurantsMapInfo } from '../utils/coordinates';
 import RestaurantInfoView from '../components/RestaurantInfo';
 import { colors } from '../utils/colors';
 
-const RestaurantView = () => {
+const RestaurantView = ({navigation}) => {
 
 
 
 
     return(
         <View style={styles.container}>
-            <RestaurantInfoView restaurant={restaurantsMapInfo.restaurants[0]}/>
+            <RestaurantInfoView restaurant={restaurantsMapInfo.restaurants[0]} navigation={navigation}/>
             <View style={styles.reserveView}>
                 <TouchableOpacity style={styles.button}> 
                     <Text style={styles.buttonText}>Reservar</Text>

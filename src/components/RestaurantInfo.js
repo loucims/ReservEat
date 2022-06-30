@@ -4,7 +4,7 @@ import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity 
 import RawMap from './BareMap';
 import { colors } from '../utils/colors';
 
-const RestaurantInfoView = ({restaurant}) => {
+const RestaurantInfoView = ({restaurant, navigation}) => {
 
     return(
         <ScrollView style={styles.container}>
@@ -15,6 +15,15 @@ const RestaurantInfoView = ({restaurant}) => {
                 <View marginTop={40} alignItems={'center'} flexDirection={'column'}>
                     <Text style={styles.title}>Buti Producciones</Text>
                     <View style={styles.line} marginLeft={-10} marginTop={32}/>
+                </View>
+                <View>
+                    <TouchableOpacity style={{width: 40, height: 40, backgroundColor: colors.light_gray, borderRadius: 40/2, alignItems: 'center', justifyContent: 'center'}}
+                    onPress={() =>{
+                        navigation.goBack();
+                    }}
+                    >
+                        <Image source={require("../../assets/icons/x-icon.png")} style={{width: 20, height: 20}}/>
+                    </TouchableOpacity>
                 </View>
             </View>
 

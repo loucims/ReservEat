@@ -32,9 +32,17 @@ const HomeView = ({navigation}) => {
             <Map navigation={navigation}/> 
             <View style={styles.statusBarView}>
                 <View style={styles.statusBar}>
-                    <Image source={require("../../assets/icons/statusBar/map-pressed.png")} style={styles.icon}/>
-                    <Image source={require("../../assets/icons/statusBar/reserves.png")} style={styles.icon}/>
-                    <Image source={require("../../assets/icons/statusBar/user.png")} style={styles.icon}/>
+                    <TouchableOpacity>
+                        <Image source={require("../../assets/icons/statusBar/map-pressed.png")} style={styles.icon}/>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity>
+                        <Image source={require("../../assets/icons/statusBar/reserves.png")} style={styles.icon}/>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity>
+                        <Image source={require("../../assets/icons/statusBar/user.png")} style={styles.icon}/>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
