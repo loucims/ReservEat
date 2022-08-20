@@ -4,21 +4,20 @@ import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity 
 import { restaurantsMapInfo } from '../utils/coordinates';
 import RestaurantInfoView from '../components/RestaurantInfo';
 import { colors } from '../utils/colors';
+import MainView from '../components/MainView';
 
 const RestaurantView = ({navigation}) => {
-
-
-
-
     return(
-        <View style={styles.container}>
-            <RestaurantInfoView restaurant={restaurantsMapInfo.restaurants[0]} navigation={navigation}/>
-            <View style={styles.reserveView}>
-                <TouchableOpacity style={styles.button}> 
-                    <Text style={styles.buttonText}>Reservar</Text>
-                </TouchableOpacity>
+        <MainView statusColor={'light-content'} safeAreaTopColor={colors.red} safeAreaBottomColor={colors.red}>
+            <View style={styles.container}>
+                <RestaurantInfoView restaurant={restaurantsMapInfo.restaurants[0]} navigation={navigation}/>
+                <View style={styles.reserveView}>
+                    <TouchableOpacity style={styles.button}> 
+                        <Text style={styles.buttonText}>Reservar</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
+        </MainView>
     );
 }
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import { colors } from '../utils/colors';
 import { useFonts } from 'expo-font';
+import MainView from '../components/MainView';
 
 const RegisterView = ({navigation}) =>{
     const [username, setUsername] = useState("");
@@ -11,7 +12,7 @@ const RegisterView = ({navigation}) =>{
     const [passConfirm, setPassConfirm] = useState("");
 
     return (
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <MainView statusColor={'light-content'} safeAreaTopColor={colors.red} safeAreaBottomColor={colors.red}>
             <View style={styles.container}>
                 <View style={styles.titleRow} flexDirection={'row'}>   
                     <View style={styles.lineTitle} backgroundColor={colors.black} marginTop={16}/>
@@ -46,8 +47,7 @@ const RegisterView = ({navigation}) =>{
                 </View>
               <StatusBar style="auto" />
             </View>
-        </TouchableWithoutFeedback>
-
+        </MainView>
     );
   }
   

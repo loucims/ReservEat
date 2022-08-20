@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "349132512634",
+    "project_id": "reserveeat-maps",
+    "storage_bucket": "reserveeat-maps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349132512634:android:c85486e985027d99c8cac3",
+        "android_client_info": {
+          "package_name": "com.app.reserveat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "349132512634-5sgdaqc89825mvojukn1977u5u8mbae2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqRpryDDYIr1xYgNuRQiGUx8-nrGD0aOY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "349132512634-5sgdaqc89825mvojukn1977u5u8mbae2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

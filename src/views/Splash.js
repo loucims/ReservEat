@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import MainView from '../components/MainView';
 import { colors } from '../utils/colors';
 
 const SplashView = ({ navigation }) =>{
@@ -10,9 +11,11 @@ const SplashView = ({ navigation }) =>{
   }, 3000)
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.splashText}>ReservEat</Text>
-    </View>
+    <MainView statusColor={'light-content'} safeAreaTopColor={colors.red} safeAreaBottomColor={colors.red}>
+      <View style={styles.container}>
+        <Text style={styles.splashText}>ReservEat</Text>
+      </View>
+    </MainView>
   );
 }
   

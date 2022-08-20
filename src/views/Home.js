@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 //----------------------------------------------------------\\
 import Map from '../components/Map';
 import { foodCategories } from '../utils/categories';
 import { colors } from '../utils/colors';
+import MainView from '../components/MainView'
 
 const HomeView = ({navigation}) => {
     const [searchField, setSearchField] = useState('');
 
 
     return(
-        <View style={styles.container}>
-            
+        <MainView statusColor={'light-content'} safeAreaTopColor={colors.red} safeAreaBottomColor={colors.red}>
             <View style={styles.discoveryBarView}>
                 <View style={styles.discoveryBar}>
                     <Image source={require("../../assets/icons/discoveryBar/search.png")} style={styles.searchIcon} marginHorizontal={20} marginTop={15}/>
@@ -45,7 +46,7 @@ const HomeView = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>
+        </MainView>
     );
 };
 
@@ -53,6 +54,8 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       alignItems: 'center',
+      backgroundColor: colors.black,
+      padding: Platform.OS === 'android' ? StatusBarNative.currentHeight : 0
     },
     discoveryBarView: {
         width: '100%',

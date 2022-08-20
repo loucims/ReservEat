@@ -22,16 +22,22 @@
       "bundleIdentifier": "com.app.reserveat",
       "config": {
         "googleMapsApiKey": "AIzaSyA0fUmmqdlLePAJIdnqmQcA68OPKZNf6sg"
-      }
+      },
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "googleServicesFile": "./google-services.json",
+      "package": "com.app.reserveat"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "@react-native-google-signin/google-signin"
+    ]
   }
 }
