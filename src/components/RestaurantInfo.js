@@ -68,7 +68,9 @@ const styles = StyleSheet.create({
       backgroundColor: colors.white
     },
     restaurantHeader: {
-        padding:30
+        padding: '5%',
+        height: '20%',
+        width: '90%',
     },
     cubeBackground: {
         width: 100,

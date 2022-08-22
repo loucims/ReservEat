@@ -3,14 +3,16 @@ import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity 
 //----------------------------------------------------------\\
 import { restaurantsMapInfo } from '../utils/coordinates';
 import RestaurantInfoView from '../components/RestaurantInfo';
+import RestaurantInfoViewV2 from '../components/RestaurantInfov2';
 import { colors } from '../utils/colors';
 import MainView from '../components/MainView';
+import { scale, verticalScale, moderateScale } from '../utils/scaling';
 
 const RestaurantView = ({navigation}) => {
     return(
-        <MainView statusColor={'light-content'} safeAreaTopColor={colors.red} safeAreaBottomColor={colors.red}>
+        <MainView statusColor={'dark-content'} safeAreaTopColor={colors.white} safeAreaBottomColor={colors.red}>
             <View style={styles.container}>
-                <RestaurantInfoView restaurant={restaurantsMapInfo.restaurants[0]} navigation={navigation}/>
+                <RestaurantInfoViewV2 restaurant={restaurantsMapInfo.restaurants[0]} navigation={navigation}/>
                 <View style={styles.reserveView}>
                     <TouchableOpacity style={styles.button}> 
                         <Text style={styles.buttonText}>Reservar</Text>
@@ -27,36 +29,23 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     reserveView: {
-        backgroundColor: colors.black,
+        backgroundColor: colors.red,
         width: '100%',
-        height: '8%',
-        alignItems: 'center'
-    },
-    icon: {
-        width: 30,
-        height: 30
-    },
-    searchIcon:{
-        width: 24,
-        height: 24
-    },
-    line: {
-        backgroundColor: colors.white,
-        width: 325,
-        height: 1
+        height: '9%',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     button: {
         backgroundColor: colors.white,
         borderRadius: 50,
-        width: 350,
-        height: 50,
+        width: '85%',
+        height: '60%',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 15
     },
     buttonText: {
         fontFamily: 'Aveni-Medium',
-        fontSize: 20
+        fontSize: moderateScale(20, 0.3) 
     },
   });
 
