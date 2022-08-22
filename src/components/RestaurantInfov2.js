@@ -79,14 +79,11 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
 
             {menuItems.items.map(item => (
                 <View key={item.name} style={styles.menuItemContainer}>
-                    <View style={[styles.header, {paddingBottom: '0%'}]}>
+                    <View style={[styles.header, {flexDirection: 'row'}]}>
                         <View style={[styles.iconContainer , {borderColor: colors.red}]}>
                             <Image source={require("../../assets/testbuti.jpg")} style={styles.restaurantIcon}/>
                         </View>
-                        <View style={styles.titleContainer}>
-                            <Text style={{fontFamily: 'Aveni-Medium',fontSize: moderateScale(15, 0.2)}}>Producciones Buti</Text>
-                            <View style={[styles.titleLine , {backgroundColor: colors.red}]}/>
-                        </View>
+                        <View style={[styles.titleLine , {backgroundColor: colors.red, width: '70%', marginTop: 'auto'}]}/>
                     </View>
                 </View>
             ))}
@@ -102,6 +99,23 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
 
                 </View>
             ))}
+
+                        <View style={styles.itemInfoContainer}>
+                            <View style={[styles.infoContainer, {backgroundColor: colors.black}]}>
+                                <Text style={{fontFamily: 'Aveni-Heavy',fontSize: moderateScale(17, 0.2), paddingBottom: '1.5%'}}>
+                                    {item.name}
+                                </Text>
+
+                                <Text style={{fontFamily: 'Aveni-Medium',fontSize: moderateScale(15, 0.2)}}>
+                                    {item.descripcion}
+                                </Text>
+
+                                <Text style={{fontFamily: 'Aveni-Medium',fontSize: moderateScale(15, 0.2), alignSelf: 'flex-end', marginTop: 'auto'}}>
+                                    100$
+                                </Text>
+                            </View>
+
+                        </View>
 */
 const styles = StyleSheet.create({
     container: {
@@ -159,7 +173,7 @@ const styles = StyleSheet.create({
     },
     titleLine: {
         width: '70%',
-        height: '2.9%',
+        height: '2.8%',
         backgroundColor: colors.white,
         marginLeft: '-2%',
     },
@@ -224,6 +238,14 @@ const styles = StyleSheet.create({
         shadowRadius: 2,  
         elevation: 5
     },
+    itemInfoContainer: { 
+        width: '70%',
+    },
+    infoContainer: {
+        width: '100%', 
+        height: 0.12 * windowHeight,
+
+    }
 
 });
 

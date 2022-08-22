@@ -27,7 +27,7 @@ const App = () => {
   if (!loaded){
       return null
   }
-  
+  return (<RestaurantView></RestaurantView>)
   return (
     <View style={styles.container}>
       <NavigationContainer>
