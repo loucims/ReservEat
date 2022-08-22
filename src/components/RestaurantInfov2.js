@@ -3,6 +3,7 @@ import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity,
 import { LinearGradient } from 'expo-linear-gradient';
 //----------------------------------------------------------\\
 import RawMap from './BareMap';
+import { menuItems } from '../utils/menuItems';
 import { colors } from '../utils/colors';
 import { scale, verticalScale, moderateScale } from '../utils/scaling';
 
@@ -20,11 +21,8 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
                 <LinearGradient colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.4)']} style={{width: '100%', height: '100%', justifyContent: 'flex-end'}}>
 
                     <View style={styles.backButtonContainer}>
-                        <TouchableOpacity style={{width: '100%', height: '100%', backgroundColor: colors.light_gray, borderRadius: 99, alignItems: 'center', justifyContent: 'center'}}
-                        onPress={() =>{
-                            navigation.goBack();
-                        }}
-                        >
+                        <TouchableOpacity style={{width: '100%', height: '100%', backgroundColor: 'rgba(255, 255, 255, 0.7)', borderRadius: 99, alignItems: 'center', justifyContent: 'center'}}
+                        onPress={() =>{navigation.goBack();}}>
                             <Image source={require("../../assets/icons/x-icon.png")} style={{width: scale(15), height: scale(15)}}/>
                         </TouchableOpacity>
                     </View>
@@ -45,15 +43,64 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
 
             <View style={styles.informationBarContainer}>
                 <View style={styles.informationBar}>
-                    <Text>Abierto</Text>
-                    <Text>A las tal y tal</Text>
+                    <View style={[styles.infoSection, {borderRightWidth: 0.5, borderColor: '#999999'}]}>
+                        <Text style={{fontFamily: 'Aveni-Heavy',fontSize: moderateScale(17, 0.2)}}>
+                            Abierto
+                        </Text>
+                    </View>
+                    <View style={styles.infoSection}>
+                        <Text style={{fontFamily: 'Aveni-Medium',fontSize: moderateScale(15, 0.2)}}>
+                            Cierra a las tal y tal
+                        </Text>
+                    </View>
                 </View>
             </View>
+
+            <View style={styles.buttonBarContainer}>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={{fontFamily: 'Aveni-Heavy',fontSize: moderateScale(15, 0.2)}}>
+                        Menu
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.button}>
+                    <Text style={{fontFamily: 'Aveni-Heavy',fontSize: moderateScale(15, 0.2)}}>
+                        Ubicacion
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.button}>
+                    <Text style={{fontFamily: 'Aveni-Heavy',fontSize: moderateScale(15, 0.2)}}>
+                        Ratings
+                    </Text>
+                </TouchableOpacity>
+            </View>
+
+
+            <View style={styles.menuItemContainer}>
+
+            </View>
+
+            <View style={styles.menuItemContainer}>
+
+            </View>
+
+            <View style={styles.menuItemContainer}>
+
+            </View>
+
+            <View style={{height: 10}}/>
 
         </ScrollView>
     );
 }
+/* 
+            {menuItems.items.map(item => (
+                <View key={item.name} style={styles.menuItemContainer}>
 
+                </View>
+            ))}
+*/
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -119,26 +166,55 @@ const styles = StyleSheet.create({
     informationBarContainer: {
         height: 0.1 * windowHeight,
         width: '100%',
-        backgroundColor: colors.light_gray,
         justifyContent: 'center',
         alignItems: 'center'
     },
     informationBar: {
         backgroundColor: colors.white,
-        borderRadius: 50,
+        borderColor: '#999999',
+        borderWidth: 0.5,
+        borderRadius: 15,
         width: '85%',
-        height: '55%',
+        height: '50%',
         flexDirection: 'row',
-        justifyContent: 'space-around',
         alignItems: 'center',
 
     },
-    timeTableTxt: {
-
+    infoSection: {
+        width: '50%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    statusTxt: {
-        
-    }
+
+    //Button bar
+    buttonBarContainer: {
+        height: 0.075 * windowHeight,
+        width: '100%',
+        backgroundColor: colors.red,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center'
+    },
+    button: {
+        backgroundColor: colors.white,
+        borderRadius: 10,
+        width: '30%',
+        height: '45%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
+    //Menu items
+    menuItemContainer: {
+        height: 0.18 * windowHeight,
+        width: '95%',
+        borderRadius: 6,
+        backgroundColor: colors.black,
+        alignSelf: 'center',
+        marginTop: '3%'
+    },
 
 });
 
