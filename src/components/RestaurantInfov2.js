@@ -77,17 +77,19 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
             </View>
 
 
-            <View style={styles.menuItemContainer}>
-
-            </View>
-
-            <View style={styles.menuItemContainer}>
-
-            </View>
-
-            <View style={styles.menuItemContainer}>
-
-            </View>
+            {menuItems.items.map(item => (
+                <View key={item.name} style={styles.menuItemContainer}>
+                    <View style={[styles.header, {paddingBottom: '0%'}]}>
+                        <View style={[styles.iconContainer , {borderColor: colors.red}]}>
+                            <Image source={require("../../assets/testbuti.jpg")} style={styles.restaurantIcon}/>
+                        </View>
+                        <View style={styles.titleContainer}>
+                            <Text style={{fontFamily: 'Aveni-Medium',fontSize: moderateScale(15, 0.2)}}>Producciones Buti</Text>
+                            <View style={[styles.titleLine , {backgroundColor: colors.red}]}/>
+                        </View>
+                    </View>
+                </View>
+            ))}
 
             <View style={{height: 10}}/>
 
@@ -106,7 +108,7 @@ const styles = StyleSheet.create({
         flex: 1,
         height: '100%',
         width: '100%',
-        backgroundColor: colors.white
+        backgroundColor: colors.light_gray
     },
     //Background photo of restaurant
     headerContainer: {
@@ -164,8 +166,9 @@ const styles = StyleSheet.create({
 
     //Information bar
     informationBarContainer: {
-        height: 0.1 * windowHeight,
+        height: 0.095 * windowHeight,
         width: '100%',
+        backgroundColor: colors.white,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -211,9 +214,15 @@ const styles = StyleSheet.create({
         height: 0.18 * windowHeight,
         width: '95%',
         borderRadius: 6,
-        backgroundColor: colors.black,
+        backgroundColor: colors.white,
         alignSelf: 'center',
-        marginTop: '3%'
+        justifyContent: 'center',
+        marginTop: '3%',
+        shadowColor: '#000',
+        shadowOffset: { width: 1, height: 0.5 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,  
+        elevation: 5
     },
 
 });
