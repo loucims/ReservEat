@@ -17,11 +17,18 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
         <ScrollView style={styles.container}>
             
             <ImageBackground style={styles.headerContainer} source={require("../../assets/testbuti.jpg")}>
+                <LinearGradient colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.4)']} style={{width: '100%', height: '100%', justifyContent: 'flex-end'}}>
 
-            
-                <LinearGradient colors={['rgba(0, 0, 0, 0)', 'rgba(255, 255, 255, 1)']} style={{width: '100%', height: '100%', justifyContent: 'flex-end'}}>
                     <View style={styles.backButtonContainer}>
+                        <TouchableOpacity style={{width: '100%', height: '100%', backgroundColor: colors.light_gray, borderRadius: 99, alignItems: 'center', justifyContent: 'center'}}
+                        onPress={() =>{
+                            navigation.goBack();
+                        }}
+                        >
+                            <Image source={require("../../assets/icons/x-icon.png")} style={{width: scale(15), height: scale(15)}}/>
+                        </TouchableOpacity>
                     </View>
+
                     <View style={styles.header}>
                         <View style={styles.iconContainer}>
                             <Image source={require("../../assets/testbuti.jpg")} style={styles.restaurantIcon}/>
@@ -31,12 +38,16 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
                             <View style={styles.titleLine}/>
                         </View>
                     </View>
+
                 </LinearGradient>
             </ImageBackground>
 
 
-            <View>
-
+            <View style={styles.informationBarContainer}>
+                <View style={styles.informationBar}>
+                    <Text>Abierto</Text>
+                    <Text>A las tal y tal</Text>
+                </View>
             </View>
 
         </ScrollView>
@@ -59,9 +70,12 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     backButtonContainer: {
-        width: 0.05 * windowHeight,
-        height: 0.05 * windowHeight,
-        backgroundColor: colors.dim_red,
+        width: 0.04 * windowHeight,
+        height: 0.04 * windowHeight,
+        alignSelf: 'flex-end',
+        marginBottom: 'auto',
+        marginTop: '2%',
+        marginRight: '1%'
     },
     //Main title
     header: {
@@ -78,7 +92,7 @@ const styles = StyleSheet.create({
         width: 0.12 * windowHeight,
         borderRadius: 5,
         borderWidth: '3%',
-        borderColor: colors.black,
+        borderColor: colors.white,
         overflow: 'hidden',
     },
     restaurantIcon: {
@@ -91,22 +105,41 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         fontFamily: 'Aveni-Heavy',
         fontSize: moderateScale(26, 0.2),
-        padding: '1%'
+        padding: '1%',
+        color: colors.white,
     },
     titleLine: {
-        width: '55%',
+        width: '70%',
         height: '2.9%',
-        backgroundColor: colors.black,
+        backgroundColor: colors.white,
         marginLeft: '-2%',
     },
 
     //Information bar
-    informationBarContainer: {},
-    informationBar: {},
-    infoButton: {},
+    informationBarContainer: {
+        height: 0.1 * windowHeight,
+        width: '100%',
+        backgroundColor: colors.light_gray,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    informationBar: {
+        backgroundColor: colors.white,
+        borderRadius: 50,
+        width: '85%',
+        height: '55%',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
 
+    },
+    timeTableTxt: {
 
+    },
+    statusTxt: {
+        
+    }
 
-  });
+});
 
 export default RestaurantInfoViewV2;

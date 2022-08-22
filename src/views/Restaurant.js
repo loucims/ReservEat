@@ -10,7 +10,7 @@ import { scale, verticalScale, moderateScale } from '../utils/scaling';
 
 const RestaurantView = ({navigation}) => {
     return(
-        <MainView statusColor={'dark-content'} safeAreaTopColor={colors.white} safeAreaBottomColor={colors.red}>
+        <MainView statusColor={'dark-content'} safeAreaTopColor={colors.red} safeAreaBottomColor={colors.red}>
             <View style={styles.container}>
                 <RestaurantInfoViewV2 restaurant={restaurantsMapInfo.restaurants[0]} navigation={navigation}/>
                 <View style={styles.reserveView}>
