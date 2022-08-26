@@ -41,7 +41,7 @@ const App = () => {
             
             <Stack.Screen name={"Register"} component={RegisterView}/>
             
-            <Stack.Screen name={"Restaurant"} component={RestaurantView}/>
+            <Stack.Screen name={"Restaurant"} component={RestaurantView} options={{gestureDirection: ''}}/>
             
             <Stack.Screen name={"Home"} component={HomeView}/>
           </Stack.Navigator>

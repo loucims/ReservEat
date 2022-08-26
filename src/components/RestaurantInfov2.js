@@ -120,7 +120,7 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
                     <View style={styles.backButtonContainer}>
                         <TouchableOpacity style={{width: '100%', height: '100%', backgroundColor: 'rgba(255, 255, 255, 0.7)', borderRadius: 99, alignItems: 'center', justifyContent: 'center'}}
                         onPress={() =>{navigation.goBack();}}>
-                            <Image source={require("../../assets/icons/x-icon.png")} style={{width: scale(15), height: scale(15)}}/>
+                            <Image source={require("../../assets/icons/left-arrow.png")} style={{width: scale(10), height: scale(15)}}/>
                         </TouchableOpacity>
                     </View>
 
@@ -184,6 +184,8 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: colors.light_gray
     },
+
+
     //Background photo of restaurant
     headerContainer: {
         height: 0.2 * windowHeight,
@@ -195,11 +197,13 @@ const styles = StyleSheet.create({
     backButtonContainer: {
         width: 0.04 * windowHeight,
         height: 0.04 * windowHeight,
-        alignSelf: 'flex-end',
+        alignSelf: 'flex-start',
         marginBottom: 'auto',
         marginTop: '2%',
-        marginRight: '1%'
+        marginLeft: '2%'
     },
+
+
     //Main title
     header: {
         flexDirection: 'row',
