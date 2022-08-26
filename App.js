@@ -23,11 +23,12 @@ const App = () => {
   const [loaded] = useFonts({
     'Aveni-Heavy': require('./assets/fonts/Avenir/Metropolis-SemiBold.otf'),
     'Aveni-Medium': require('./assets/fonts/Avenir/Metropolis-Medium.otf'),
+    'Aveni-Regular': require('./assets/fonts/Avenir/Metropolis-Regular.otf'),
   })
   if (!loaded){
       return null
   }
-  return (<RestaurantView></RestaurantView>)
+  
   return (
     <View style={styles.container}>
       <NavigationContainer>

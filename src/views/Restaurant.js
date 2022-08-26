@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import SwipeUpDown from 'react-native-swipe-up-down';
-import { Picker, DatePicker } from 'react-native-wheel-pick';
+//import { Picker, DatePicker } from 'react-native-wheel-pick';
+//import HorizontalPicker from '@vseslav/react-native-horizontal-picker';
+import { PickerTime, DropdownList } from 'react-native-ultimate-modal-picker';
+
 //----------------------------------------------------------\\
 import { restaurantsMapInfo } from '../utils/coordinates';
-import RestaurantInfoView from '../components/RestaurantInfo';
 import RestaurantInfoViewV2 from '../components/RestaurantInfov2';
 import { colors } from '../utils/colors';
 import MainView from '../components/MainView';
@@ -14,23 +16,21 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const RestaurantView = ({navigation}) => {
-
-    // const [modalVisible, setModalVisible] = useState(false);
-    // const [transparencyVisible, setTransparencyVisible] = useState(false);
-    // const [dimensions, setDimensions] = useState({width:0, height:0});
     
     const modal = useRef();
-    // const title = useRef();
-
-
-    // const RenderTransparentView = () => {
-    //     if (transparencyVisible === true) {
-    //         return (<View style={styles.transparentView}/>);
-    //     } else {
-    //         return null;
-    //     }
-    // };
-
+    const [time, setTime] = useState(new Date());
+    const [ listValue, setListValue ] = useState('');
+    const items = [
+        { label: '1', value: '1' },
+        { label: '2', value: '2' },
+        { label: '3', value: '3' },
+        { label: '4', value: '4' },
+        { label: '5', value: '5' },
+        { label: '6', value: '6' },
+        { label: '7', value: '7' },
+        { label: '8+', value: '8+' },
+      ];
+    
     return(
         <MainView statusColor={'dark-content'} safeAreaTopColor={colors.red} safeAreaBottomColor={colors.red}>
             <View style={styles.container}>
@@ -40,23 +40,125 @@ const RestaurantView = ({navigation}) => {
                         <Text style={styles.buttonText}>Reservar</Text>
                     </TouchableOpacity>
                 </View>
-                
-                {/* {RenderTransparentView()} */}
             </View>
 
             
             <SwipeUpDown
                 itemFull={(close) => (
                     <View style={styles.reservationView}>
-                        <Text style={{fontFamily: 'Aveni-Heavy', fontSize: scale(30), marginTop: '5%'}}>Tu Reserva</Text>
-                        <TouchableWithoutFeedback>
-                            <Picker
-                            style={{ backgroundColor: 'white', width: '20%'}}
-                            pickerData={['1', '2', '3', '4', '5', '6', '7']}
-                            onValueChange={value => { console.log(value) }}
+                        <Text style={{fontFamily: 'Aveni-Heavy', fontSize: scale(30), marginTop: '5%', marginBottom: '2%'}}>Tu Reserva</Text>
+                            <View style={{backgroundColor: colors.black, width: '80%', height: '0.1%', marginBottom: '15%'}}/>
+                            <PickerTime
+                            title="Hora y fecha"
+                            onChange={(date) => setTime(date)}
+                            mode="spinner"         
+                            customStyleLabelText={{
+                                labelTextLight: {
+                                  fontFamily: 'Aveni-Heavy',
+                                  fontSize: 22,
+                                  fontWeight: '800',
+                                  textTransform: 'none',
+                                  color: colors.black,
+                                },
+                                labelTextDark: {
+                                  fontFamily: 'Aveni-Heavy',
+                                  fontSize: 22,
+                                  fontWeight: '800',
+                                  textTransform: 'none',
+                                  color: colors.black,
+                                },
+                            }}
                             />
-                        </TouchableWithoutFeedback>
+                            <View style={{width: '100%', height: '3%'}}/>
+                            <DropdownList
+                            title="Numero de personas"
+                            items={items}
+                            onChange={(value) => setListValue(value)}
+                            customStyleLabelText={{
+                                labelTextLight: {
+                                  fontFamily: 'Aveni-Heavy',
+                                  fontSize: 22,
+                                  fontWeight: '800',
+                                  textTransform: 'none',
+                                  color: colors.black,
+                                },
+                                labelTextDark: {
+                                  fontFamily: 'Aveni-Heavy',
+                                  fontSize: 22,
+                                  fontWeight: '800',
+                                  textTransform: 'none',
+                                  color: colors.black,
+                                },
+                            }}
+                            customStyleFieldText={{
+                                fieldTextLight: {
+                                  fontFamily: 'Aveni-Regular',
+                                  fontSize: 22,
+                                  fontWeight: '800',
+                                  textTransform: 'lowercase',
+                                  color: colors.black,
+                                },
+                                fieldTextDark: {
+                                  fontFamily: 'Aveni-Regular',
+                                  fontSize: 22,
+                                  fontWeight: '800',
+                                  textTransform: 'lowercase',
+                                  color: colors.black,
+                                },
+                              }}
+                              customStyleCancelText={{
+                                cancelTextLight: {
+                                  fontFamily: 'Aveni-Medium',
+                                  fontSize: 22,
+                                  fontWeight: '800',
+                                  color: colors.black,
+                                },
+                                cancelTextDark: {
+                                  fontFamily: 'Aveni-Medium',
+                                  fontSize: 22,
+                                  fontWeight: '800',
+                                  color: colors.black,
+                                },
+                              }}
+                              customStyleDoneText={{
+                                doneTextLight: {
+                                    fontFamily: 'Aveni-Medium',
+                                    fontSize: 22,
+                                    fontWeight: '800',
+                                    color: colors.black,
+                                },
+                                doneTextDark: {
+                                    fontFamily: 'Aveni-Medium',
+                                    fontSize: 22,
+                                    fontWeight: '800',
+                                    color: colors.black,
+                                },
+                              }}/>
+                            <View style={{width: '100%', height: '3%'}}/>
+                            <Text style={{
+                                fontFamily: 'Aveni-Heavy',
+                                fontSize: 22,
+                                fontWeight: '800',
+                                color: colors.black,
+                                alignSelf: 'flex-start',
+                                marginLeft: '6%',
+                                marginBottom: '4%'
+                            }}
+                            > 
+                                Aclaraciones
+                            </Text>
+                            <View style={{borderWidth: 1, width: '90%', height: '20%', justifyContent: 'flex-start', alignItems: 'flex-start', borderRadius: 8, borderColor: colors.gray}}>
+                                <TextInput style={[styles.textInput, {fontSize: 20}]} multiline={true} 
+                                    selectionColor={colors.black}
+                                    blurOnSubmit={true}
+                                    placeholder={'Algo que aclarar?'}
+                                    placeholderTextColor={colors.gray}>
+                                </TextInput>
+                            </View>
 
+                            <TouchableOpacity style={styles.confirmButton}> 
+                                <Text style={[styles.buttonText, {color: colors.white}]}>Confirmar reserva</Text>
+                            </TouchableOpacity>
                     </View>
                   )}
                 animation="spring"
@@ -65,14 +167,20 @@ const RestaurantView = ({navigation}) => {
                 iconColor='yellow'
                 iconSize={30}
                 ref={modal}
-                style={{ backgroundColor: 'rgba(255, 255, 255, 1)' }} // style for swipe
-                />
+                style={{ backgroundColor: 'rgba(255, 255, 255, 1)', borderTopRightRadius: 40, borderTopLeftRadius: 40,
+                shadowColor: '#000',
+                shadowOffset: { width: 1, height: 1 },
+                shadowOpacity: 0.8,
+                shadowRadius: 20,  
+                elevation: 5}} // style for swipe
+            />
             
         </MainView>
     );
 }
 
 const styles = StyleSheet.create({
+    //Basic layout
     container: {
       flex: 1,
       alignItems: 'center',
@@ -87,7 +195,7 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: colors.white,
         borderRadius: 15,
-        width: '60%',
+        width: '85%',
         height: '60%',
         justifyContent: 'center',
         alignItems: 'center',
@@ -97,24 +205,35 @@ const styles = StyleSheet.create({
         fontSize: moderateScale(20, 0.3) 
     },
 
+    //Reservation layout
     reservationView: {
         width: '100%',
         height: '100%',
         alignItems: 'center',
     },
-    modalView: {
-        width: windowWidth,
-        height: windowHeight,
+    textInput: {
+        width: '100%',
+        height: '100%',
+        fontFamily: 'Aveni-Medium',
+        fontSize: 19,
+        color: colors.black,
+    },
+    confirmButton: {
+        backgroundColor: colors.red,
+        borderRadius: 15,
+        width: '80%',
+        height: '6%',
+        justifyContent: 'center',
         alignItems: 'center',
-        justifyContent: 'flex-end',
+        marginTop: 'auto',
+        marginBottom: '25%',
+        shadowColor: '#000',
+        shadowOffset: { width: 1, height: 0.5 },
+        shadowOpacity: 0.4,
+        shadowRadius: 2,  
+        elevation: 5
     },
-    transparentView: {
-        position: 'absolute', 
-        width: windowWidth, 
-        height: windowHeight + 200, 
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
-        top: -100
-    },
+
   });
 
 export default RestaurantView;
