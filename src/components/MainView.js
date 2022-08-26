@@ -7,7 +7,7 @@ import { colors } from '../utils/colors';
 
 const MainView = ({statusColor, safeAreaTopColor, safeAreaBottomColor, children}) => {
     return (
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} flex={1}>
+        <View flex={1}>
             <SafeAreaProvider>
                 <StatusBar barStyle={statusColor}/>
                 <SafeAreaView edges={['top']} style={{flex: 0, backgroundColor: safeAreaTopColor}}/>
@@ -15,7 +15,7 @@ const MainView = ({statusColor, safeAreaTopColor, safeAreaBottomColor, children}
                     {children}
                 </SafeAreaView>
             </SafeAreaProvider>
-        </TouchableWithoutFeedback>
+        </View>
     );
 };
 

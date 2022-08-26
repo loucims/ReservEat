@@ -9,6 +9,7 @@ import MainView from '../components/MainView';
 import { scale, verticalScale, moderateScale } from '../utils/scaling';
 
 const RestaurantView = ({navigation}) => {
+
     return(
         <MainView statusColor={'dark-content'} safeAreaTopColor={colors.red} safeAreaBottomColor={colors.red}>
             <View style={styles.container}>
@@ -37,8 +38,8 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: colors.white,
-        borderRadius: 50,
-        width: '85%',
+        borderRadius: 15,
+        width: '60%',
         height: '60%',
         justifyContent: 'center',
         alignItems: 'center',
