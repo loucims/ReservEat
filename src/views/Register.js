@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, TouchableWithoutFe
 import { colors } from '../utils/colors';
 import { useFonts } from 'expo-font';
 import MainView from '../components/MainView';
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 const RegisterView = ({navigation}) =>{
     const [username, setUsername] = useState("");
@@ -11,23 +12,59 @@ const RegisterView = ({navigation}) =>{
     const [password, setPassword] = useState("");
     const [passConfirm, setPassConfirm] = useState("");
 
+    const mediumText = RFValue(17);
+    const smallText = RFValue(16);
+
+
     return (
-        <MainView statusColor={'light-content'} safeAreaTopColor={colors.red} safeAreaBottomColor={colors.red}>
+        <MainView statusColor={'dark-content'} safeAreaTopColor={colors.white} safeAreaBottomColor={colors.white}>
             <View style={styles.container}>
-                <View style={styles.titleRow} flexDirection={'row'}>   
-                    <View style={styles.lineTitle} backgroundColor={colors.black} marginTop={16}/>
+                <View style={styles.titleRow} flexDirection={'row'} alignItems={'center'}>   
+                    <View style={styles.lineTitle} backgroundColor={colors.black}/>
                     <Text style={styles.title}>Registrarse</Text>
-                    <View style={styles.lineTitle} backgroundColor={colors.black} marginTop={16}/>
+                    <View style={styles.lineTitle} backgroundColor={colors.black}/>
                 </View>
                 <View style={styles.backdrop}>
-                    <TextInput onChangeText={(input) =>{setUsername(input)}} style={styles.input} fontSize={username ? 19 : 20} marginBottom={-5} placeholder="Nombre" placeholderTextColor={colors.white}/>
-                    <View style={styles.line} backgroundColor={colors.white} marginBottom={20}/>
-                    <TextInput onChangeText={(input) =>{setEmail(input)}} style={styles.input} fontSize={email ? 17 : 20} marginBottom={-5} placeholder="Email" placeholderTextColor={colors.white}/>
-                    <View style={styles.line} backgroundColor={colors.white} marginBottom={20}/>
-                    <TextInput secureTextEntry={true} onChangeText={(input) =>{setPassword(input)}} style={styles.input} fontSize={password ? 19 : 20} marginBottom={-5} placeholder="Contraseña" placeholderTextColor={colors.white}/>
-                    <View style={styles.line} backgroundColor={colors.white} marginBottom={20}/>
-                    <TextInput secureTextEntry={true} onChangeText={(input) =>{setPassConfirm(input)}} style={styles.input} fontSize={passConfirm ? 19 : 20} marginBottom={-5} placeholder="Confirmar contraseña" placeholderTextColor={colors.white}/>
-                    <View style={styles.line} backgroundColor={colors.white} marginBottom={95}/>
+                    <TextInput onChangeText={(input) =>{setUsername(input)}} 
+                        adjustsFontSizeToFit={true} numberOfLines={1}
+                        style={styles.input} 
+                        fontSize={username ? smallText : mediumText} 
+                        selectionColor={colors.black}
+                        placeholder="Nombre" 
+                        placeholderTextColor={colors.white}/>
+
+                    <View style={styles.line} backgroundColor={colors.white} marginBottom={'6%'}/>
+
+                    <TextInput onChangeText={(input) =>{setEmail(input)}} 
+                        adjustsFontSizeToFit={true} numberOfLines={1}
+                        style={styles.input} 
+                        fontSize={email ? smallText : mediumText} 
+                        selectionColor={colors.black}
+                        placeholder="Email" 
+                        placeholderTextColor={colors.white}/>
+
+                    <View style={styles.line} backgroundColor={colors.white} marginBottom={'6%'}/>
+
+                    <TextInput secureTextEntry={true} 
+                        adjustsFontSizeToFit numberOfLines={1}
+                        onChangeText={(input) =>{setPassword(input)}} 
+                        style={styles.input} 
+                        fontSize={password ? smallText : mediumText} 
+                        selectionColor={colors.black}
+                        placeholder="Contraseña" 
+                        placeholderTextColor={colors.white}/>
+
+                    <View style={styles.line} backgroundColor={colors.white} marginBottom={'6%'}/>
+                    
+                    <TextInput secureTextEntry={true} 
+                        adjustsFontSizeToFit={true} numberOfLines={1}
+                        onChangeText={(input) =>{setPassConfirm(input)}} 
+                        style={styles.input} fontSize={passConfirm ? smallText : mediumText} 
+                        selectionColor={colors.black}
+                        placeholder="Confirmar contraseña" 
+                        placeholderTextColor={colors.white}/>
+
+                    <View style={styles.line} backgroundColor={colors.white} marginBottom={'30%'}/>
 
     
     
@@ -36,7 +73,7 @@ const RegisterView = ({navigation}) =>{
                     }}> 
                         <Text style={styles.buttonText}>Confirmar</Text>
                     </TouchableOpacity>
-                    <View flexDirection={'row'}>
+                    <View style={styles.logOnTextContainer}>
                         <Text style={styles.text}>Ya estas registrado?&nbsp;</Text>
                         <TouchableOpacity onPress={() =>{
                             navigation.navigate("LogIn")
@@ -58,8 +95,8 @@ const RegisterView = ({navigation}) =>{
         alignItems: 'center'
     },
     titleRow: {
-        paddingTop: 100,
-        paddingBottom: 40,
+        paddingTop: '15%',
+        paddingBottom: '10%',
     },
     title: {
         fontSize: 35,
@@ -68,9 +105,9 @@ const RegisterView = ({navigation}) =>{
         textAlign: 'center'
     },
     backdrop: {
-        backgroundColor: colors.black,
-        width: 350,
-        height: 590,
+        backgroundColor: colors.red,
+        width: '85%',
+        height: '72%',
         borderRadius: 10,
         justifyContent: 'flex-end',
         alignItems: 'center'
@@ -78,11 +115,11 @@ const RegisterView = ({navigation}) =>{
     button: {
         backgroundColor: colors.white,
         borderRadius: 50,
-        width: 150,
-        height: 50,
+        width: '50%',
+        height: '8%',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 35
+        marginBottom: '10%'
     },
     buttonText: {
         fontFamily: 'Aveni-Medium',
@@ -92,30 +129,34 @@ const RegisterView = ({navigation}) =>{
         fontFamily: 'Aveni-Medium',
         fontSize: 17,
         color: colors.white,
-        paddingBottom: 30,
     },
     registerText: {
         fontFamily: 'Aveni-Medium',
         fontSize: 17,
         textDecorationLine: 'underline',
-        color: colors.white,
-        paddingBottom: 30
+        color: colors.white
     },
     input: {
-        width: 300,
-        height: 55,
-        paddingLeft: 20,
+        width: '80%',
+        height: '8%',
+        paddingLeft: '5%',
         color: colors.white,
-        fontFamily: 'Aveni-Medium'
+        fontFamily: 'Aveni-Medium',
+        marginBottom: '-1%',
     },
     line: {
-        width: 270,
+        width: '80%',
         height: 1
     },
     lineTitle: {
-        width: 100,
+        width: '20%',
         height: 3
-    }
+    },
+    logOnTextContainer: {
+        flexDirection: 'column',
+        paddingBottom: '8%',
+        alignItems: 'center'
+    },
 });
 
 export default RegisterView;

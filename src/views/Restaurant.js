@@ -29,10 +29,10 @@ const RestaurantView = ({navigation}) => {
         { label: '6', value: '6' },
         { label: '7', value: '7' },
         { label: '8+', value: '8+' },
-      ];
+    ];
     
     return(
-        <MainView statusColor={'dark-content'} safeAreaTopColor={colors.red} safeAreaBottomColor={colors.red}>
+        <MainView statusColor={'dark-content'} safeAreaTopColor={colors.white} safeAreaBottomColor={colors.red}>
             <View style={styles.container}>
                 <RestaurantInfoViewV2 restaurant={restaurantsMapInfo.restaurants[0]} navigation={navigation}/>
                 <View style={styles.reserveView}>
@@ -167,6 +167,12 @@ const RestaurantView = ({navigation}) => {
                 iconColor='yellow'
                 iconSize={30}
                 ref={modal}
+                onBlur={
+                    () => {
+                        console.log('hi')
+                        modal.current.closeFull()
+                    }
+                }
                 style={{ backgroundColor: 'rgba(255, 255, 255, 1)', borderTopRightRadius: 40, borderTopLeftRadius: 40,
                 shadowColor: '#000',
                 shadowOffset: { width: 1, height: 1 },
