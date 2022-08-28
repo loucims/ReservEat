@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 //import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
 //----------------------------------------------------------------------------------------------------------------------\\
 import MainView from '../components/MainView';
@@ -19,26 +20,26 @@ const LogInView = ({navigation}) =>{
             setErrors({errorEmail: '', errorPassword: '', error: 'Por favor, ingrese su email y contraseña'});
             return
         } 
-        console.log(username)
-        console.log(password)
 
-        fetch('http://localhost:8080/login', {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        fetch('http://localhost:8080/clientes/login', {
             method: 'POST',
+            headers: myHeaders,
             body: JSON.stringify({
                 email: username,
                 password: password
             })
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            if (responseJson.success){
-                navigation.navigate('Home');
+        .then((response) => {
+            if (response.status === 200){
+                response.json().then(data => {console.log(data.id_cliente)});
                 setErrors({errorEmail: '', errorPassword: '', error: ''});
+                navigation.navigate('Home')
             } else {
-                setErrors({errorEmail: '', errorPassword: '', error: 'La contraseña o el email son incorrectos'});
+                setErrors({errorEmail: '', errorPassword: '', error: 'Usuario o contraseña incorrectos'});
             }
-        }).catch((error) => {
-            console.error(error);
         }).done();
     }
     
