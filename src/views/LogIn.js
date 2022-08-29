@@ -13,11 +13,11 @@ const LogInView = ({navigation}) =>{
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const [errors, setErrors] = useState({errorEmail: '', errorPassword: '', error: ''});    
+    const [error, setError] = useState('');    
 
     const verifyCredentials = () =>{
         if (username === '' || password === ''){
-            setErrors({errorEmail: '', errorPassword: '', error: 'Por favor, ingrese su email y contraseña'});
+            setError('Por favor, ingrese su email y contraseña');
             return
         } 
 
@@ -35,10 +35,10 @@ const LogInView = ({navigation}) =>{
         .then((response) => {
             if (response.status === 200){
                 response.json().then(data => {console.log(data.id_cliente)});
-                setErrors({errorEmail: '', errorPassword: '', error: ''});
+                setError('');
                 navigation.navigate('Home')
             } else {
-                setErrors({errorEmail: '', errorPassword: '', error: 'Usuario o contraseña incorrectos'});
+                setError('Usuario o contraseña incorrectos');
             }
         }).done();
     }
@@ -60,12 +60,6 @@ const LogInView = ({navigation}) =>{
                             placeholderTextColor={colors.black}/>
                         <View style={styles.line}/>
 
-                        {errors.errorEmail ? 
-                        <View style={styles.errorContainerField}>
-                            <Text style={styles.error}>{errors.errorEmail}</Text>
-                        </View> 
-                        : null}
-
                     </View>
 
 
@@ -80,24 +74,17 @@ const LogInView = ({navigation}) =>{
                             placeholderTextColor={colors.black}/>
                         <View style={styles.line}/>
 
-                        {errors.errorPassword ? 
-                        <View style={styles.errorContainerField}>
-                            <Text style={styles.error}>{errors.errorPassword}</Text>
-                        </View> 
-                        : null}
-
                     </View>
 
     
                     <TouchableOpacity style={styles.button} onPress={() =>{
-                        //navigation.navigate("Home")
                         verifyCredentials();
                     }}> 
                         <Text style={styles.buttonText}>Confirmar</Text>
 
-                        {errors.error ? 
+                        {error ? 
                         <View style={styles.errorContainerButton}>
-                            <Text numberOfLines={1} style={styles.error}>{errors.error}</Text>
+                            <Text numberOfLines={1} style={styles.error}>{error}</Text>
                         </View> 
                         : null}
                         
@@ -136,11 +123,15 @@ const LogInView = ({navigation}) =>{
     backdrop: {
         flex: moderateScale(0.95, -0.3),
         marginTop: moderateScale(2, 2),
-        width: '90%',
+        width: '85%',
         backgroundColor: colors.white,
         borderRadius: 10,
         justifyContent: 'flex-end',
-        alignItems: 'center'
+        alignItems: 'center',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.7,
+        shadowRadius: 4,  
+        elevation: 5,
     },
     button: {
         backgroundColor: colors.red,

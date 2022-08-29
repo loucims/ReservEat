@@ -1,8 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import { colors } from '../utils/colors';
-import { useFonts } from 'expo-font';
 import MainView from '../components/MainView';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
@@ -12,18 +10,55 @@ const RegisterView = ({navigation}) =>{
     const [password, setPassword] = useState("");
     const [passConfirm, setPassConfirm] = useState("");
 
+    const [error, setError] = useState('');  
+
     const mediumText = RFValue(17);
     const smallText = RFValue(16);
+
+    const validateRegister = () =>{
+        if (username === '' || email === '' || password === '' || passConfirm === ''){
+            setError('Por favor, ingrese todos los campos');
+            return
+        }
+        if (password !== passConfirm){
+            setError('Las contraseñas no coinciden');
+            return
+        }
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        fetch('http://localhost:8080/clientes', {
+            method: 'POST',
+            headers: myHeaders,
+            body: JSON.stringify({
+                nombre: username,
+                email: email,
+                password: password
+            })
+        }).then((response) => {
+            if (response.status === 200){
+                setError('');
+                navigation.navigate('Home')
+            } else if (response.status === 409) {
+                setError('El email ya está registrado');
+            }
+        }).done();
+
+    }
+
 
 
     return (
         <MainView statusColor={'dark-content'} safeAreaTopColor={colors.white} safeAreaBottomColor={colors.white}>
             <View style={styles.container}>
+
                 <View style={styles.titleRow} flexDirection={'row'} alignItems={'center'}>   
                     <View style={styles.lineTitle} backgroundColor={colors.black}/>
                     <Text style={styles.title}>Registrarse</Text>
                     <View style={styles.lineTitle} backgroundColor={colors.black}/>
                 </View>
+
                 <View style={styles.backdrop}>
                     <TextInput onChangeText={(input) =>{setUsername(input)}} 
                         adjustsFontSizeToFit={true} numberOfLines={1}
@@ -69,10 +104,17 @@ const RegisterView = ({navigation}) =>{
     
     
                     <TouchableOpacity style={styles.button} onPress={() =>{
-                        navigation.navigate("Home")
+                        validateRegister()
                     }}> 
                         <Text style={styles.buttonText}>Confirmar</Text>
                     </TouchableOpacity>
+
+                    {error ? 
+                        <View style={styles.errorContainerButton}>
+                            <Text numberOfLines={1} adjustsFontSizeToFit style={styles.error}>{error}</Text>
+                        </View> 
+                    : null}
+
                     <View style={styles.logOnTextContainer}>
                         <Text style={styles.text}>Ya estas registrado?&nbsp;</Text>
                         <TouchableOpacity onPress={() =>{
@@ -81,8 +123,8 @@ const RegisterView = ({navigation}) =>{
                             <Text style={styles.registerText}>Inicia sesion</Text>
                         </TouchableOpacity>
                     </View>
+
                 </View>
-              <StatusBar style="auto" />
             </View>
         </MainView>
     );
@@ -110,7 +152,12 @@ const RegisterView = ({navigation}) =>{
         height: '72%',
         borderRadius: 10,
         justifyContent: 'flex-end',
-        alignItems: 'center'
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.7,
+        shadowRadius: 4,  
+        elevation: 5,
     },
     button: {
         backgroundColor: colors.white,
@@ -156,6 +203,31 @@ const RegisterView = ({navigation}) =>{
         flexDirection: 'column',
         paddingBottom: '8%',
         alignItems: 'center'
+    },
+    errorContainerField: {
+        position: 'absolute',
+        bottom: '-70%',
+        left: '7%',
+    },
+    errorContainerButton: {
+        position: 'absolute',
+        backgroundColor: colors.dim_red,
+        borderRadius: 5,
+        width: '100%',
+        paddingVertical: '2%',
+        bottom: '30%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1,  
+        elevation: 5,
+    },
+    error: {
+        color: colors.white,
+        fontSize: RFValue(12),
+        fontFamily: 'Aveni-Medium',
     },
 });
 

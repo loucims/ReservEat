@@ -28,7 +28,7 @@ const App = () => {
   if (!loaded){
       return null
   }
-  
+
   return (
     <View style={styles.container}>
       <NavigationContainer>
@@ -36,15 +36,15 @@ const App = () => {
           <Stack.Navigator screenOptions={{
             headerShown: false
           }}>
-            <Stack.Screen name={"Splash"} component={SplashView}/>
+            <Stack.Screen name={"Splash"} component={SplashView} options={{ gestureEnabled: false}}/>
             
-            <Stack.Screen name={"LogIn"} component={LogInView}/>
+            <Stack.Screen name={"LogIn"} component={LogInView} options={{animation: 'fade', gestureEnabled: false}}/>
             
-            <Stack.Screen name={"Register"} component={RegisterView}/>
+            <Stack.Screen name={"Register"} component={RegisterView} options={{animation: 'slide_from_bottom'}}/>
             
-            <Stack.Screen name={"Restaurant"} component={RestaurantView} options={{gestureDirection: ''}}/>
+            <Stack.Screen name={"Restaurant"} component={RestaurantView}/>
             
-            <Stack.Screen name={"Home"} component={HomeView}/>
+            <Stack.Screen name={"Home"} component={HomeView} options={{animation: 'fade', gestureEnabled: false}}/>
           </Stack.Navigator>
         </>
       </NavigationContainer>
