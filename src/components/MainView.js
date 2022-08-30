@@ -5,13 +5,13 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../utils/colors';
 //----------------------------------------------------------\\
 
-const MainView = ({statusColor, safeAreaTopColor, safeAreaBottomColor, direction, children}) => {
+const MainView = ({statusColor, safeAreaTopColor, safeAreaBottomColor, direction, justify, children}) => {
     return (
         <View flex={1}>
             <SafeAreaProvider>
                 <StatusBar barStyle={statusColor}/>
                 <SafeAreaView edges={['top']} style={{flex: 0, backgroundColor: safeAreaTopColor}}/>
-                <SafeAreaView edges={['bottom', 'left', 'right']} style={{flex:1, backgroundColor: safeAreaBottomColor, position: 'relative', flexDirection: direction}}>
+                <SafeAreaView edges={['bottom', 'left', 'right']} style={{flex:1, backgroundColor: safeAreaBottomColor, position: 'relative', flexDirection: direction, justifyContent: justify}}>
                     {children}
                 </SafeAreaView>
             </SafeAreaProvider>

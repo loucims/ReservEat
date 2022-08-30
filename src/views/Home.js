@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 //----------------------------------------------------------\\
+import DiscoveryView from '../screens/Discovery';
+import MyReservationsView from '../screens/MyReservations';
 import Map from '../components/Map';
 import { foodCategories } from '../utils/categories';
 import { colors } from '../utils/colors';
@@ -20,70 +22,56 @@ const reservesPressed = require("../../assets/icons/statusBar/reserves-pressed.p
 
 const HomeView = ({navigation}) => {
     const [currentScreen, setCurrentScreen] = useState('Discovery');
+    const [topColor, setTopColor] = useState(colors.red);
+    const [statusTheme, setStatusTheme] = useState('light-content');
 
-    const [searchField, setSearchField] = useState('');
 
     const RenderCurrentView = () => {
         switch(currentScreen){
             case 'User':
                 break
             case 'Discovery':
-                break
+                return(<DiscoveryView navigation={navigation}/>)
             case 'Reservations':
-                break   
+                return(<MyReservationsView navigation={navigation}/>)
         }
     }
 
 
     return(
-        <MainView statusColor={'light-content'} safeAreaTopColor={colors.red} safeAreaBottomColor={colors.red} direction={'column-reverse'}>
+        <MainView statusColor={statusTheme} safeAreaTopColor={topColor} safeAreaBottomColor={colors.red} justify={'flex-end'}>
+
+
+            {RenderCurrentView()}
+
 
             <View style={styles.statusBarView}>
                 <View style={styles.statusBar}>
                     <TouchableOpacity onPress={() => {
                         setCurrentScreen('User');
+                        setTopColor(colors.red);
+                        setStatusTheme('light-content');
                     }}>
                         <Image source={currentScreen == 'User' ? userPressed : user} style={styles.icon}/>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => {
                         setCurrentScreen('Discovery');
+                        setTopColor(colors.red);
+                        setStatusTheme('light-content');
                     }}>
-                        <Image source={currentScreen == 'Discovery' ? mapPressed : map} style={styles.icon}/>
+                        <Image source={currentScreen == 'Discovery' ? mapPressed : map} style={[styles.icon, {marginLeft: '1.5%'}]} />
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => {
                         setCurrentScreen('Reservations');
+                        setTopColor('#F9F6EE');
+                        setStatusTheme('dark-content');
                     }}>
                         <Image source={currentScreen == 'Reservations' ? reservesPressed : reserves} style={styles.icon}/>
                     </TouchableOpacity>
                 </View>
             </View>
-
-
-            <Map navigation={navigation}/> 
-
-
-            <View style={styles.discoveryBarView}>
-                <View style={styles.discoveryBar}>
-                    <Image source={require("../../assets/icons/discoveryBar/search.png")} style={styles.searchIcon} marginHorizontal={'5%'} marginTop={'3%'}/>
-                    <View>
-                        <TextInput onChangeText={(input) =>{setSearchField(input)}} style={styles.input} 
-                        fontSize={20} placeholder="Buscar.." placeholderTextColor={colors.white}/>
-                        <View style={styles.line}/>
-                    </View>
-                </View>
-                <ScrollView style={styles.scrollDiscoveryBar} horizontal={true} alignItems={'center'}>
-                    {foodCategories.categories.map(category =>(
-                        <TouchableOpacity key={category.name} style={styles.categoryButton}>
-                            <Text style={styles.category}>{category.name}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
-            </View>
-
-
-
             
         </MainView>
     );
@@ -122,6 +110,9 @@ const styles = StyleSheet.create({
         fontFamily: 'Aveni-Heavy',
         color: colors.black
     },
+
+
+
     statusBarView: {
         backgroundColor: colors.red,
         width: '100%',
@@ -153,6 +144,48 @@ const styles = StyleSheet.create({
         color: colors.white,
         fontFamily: 'Aveni-Medium'
     },
+
+
+    //Reservations
+    titleContainer: {
+        width: '100%',
+        height: '10%',
+        marginTop: '5%',
+        backgroundColor: colors.red,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.7,
+        shadowRadius: 1,  
+        elevation: 5,
+    },
+    title: {
+        fontFamily: 'Aveni-Heavy',
+        color: colors.white,
+        fontSize: RFValue(20),
+        marginHorizontal: '2%'
+    },
+    titleLine: {
+        width: '25%',
+        height: '3%',
+        backgroundColor: colors.white,
+    },
+    reservationContainer: {
+        height: 0.18 * windowHeight,
+        width: '95%',
+        borderRadius: 6,
+        backgroundColor: colors.white,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        marginTop: '3%',
+        shadowColor: '#000',
+        shadowOffset: { width: 1, height: 0.5 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,  
+        elevation: 5
+    },
+    
   });
 
 export default HomeView;

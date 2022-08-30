@@ -7,7 +7,7 @@ import { PickerTime, DropdownList } from 'react-native-ultimate-modal-picker';
 
 //----------------------------------------------------------\\
 import { restaurantsMapInfo } from '../utils/coordinates';
-import RestaurantInfoViewV2 from '../components/RestaurantInfov2';
+import RestaurantInfoViewV2 from '../screens/RestaurantInfov2';
 import { colors } from '../utils/colors';
 import MainView from '../components/MainView';
 import { scale, verticalScale, moderateScale } from '../utils/scaling';

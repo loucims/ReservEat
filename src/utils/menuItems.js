@@ -20,6 +20,9 @@ export const menuItems = {
         },
         {name: 'Un GATO',
         descripcion: 'Ehhhh qsy lo hizo el buteee!!!',
+        },        
+        {name: 'Las de 6',
+        descripcion: 'Ehhhh qsy lo hizo el buteee!!!',
         },
     ]
 }

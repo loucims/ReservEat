@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity, Dimensions, ImageBackground } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 //----------------------------------------------------------\\
-import RawMap from './BareMap';
+import RawMap from '../components/BareMap';
 import { menuItems } from '../utils/menuItems';
 import { colors } from '../utils/colors';
 import { scale, verticalScale, moderateScale } from '../utils/scaling';

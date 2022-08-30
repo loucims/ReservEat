@@ -13,8 +13,6 @@ import HomeView from './src/views/Home';
 import RestaurantView from './src/views/Restaurant';
 import MainView from './src/components/MainView';
 import TestScreen from './src/views/TestScreen';
-import { clickProps } from 'react-native-web/dist/cjs/modules/forwardedProps';
-
 
 const Stack = createNativeStackNavigator()
 
