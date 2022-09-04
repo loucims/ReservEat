@@ -8,12 +8,13 @@ import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-const MyReservationsView = () => {
+const MyReservationsView = ({userId}) => {
 
     const [reservations, setReservations] = useState();
 
     useEffect(() => {
-        GetReservations({id: 1})
+        GetReservations({id: userId})
+        console.log(userId)
 
     }
     ,[])
@@ -21,7 +22,7 @@ const MyReservationsView = () => {
 
     const GetReservations = ({id}) => {
         //Get request to get reservations given the user id
-        fetch(`http://localhost:8080/clientes/${id}/reservas`, {
+        fetch(`https://reserv-eat-backend.vercel.app/clientes/${id}/reservas`, {
                 method: 'GET',
                 body: '',
                 redirect: 'follow'
@@ -35,7 +36,11 @@ const MyReservationsView = () => {
 
     const stringToTime = (stringDate) => {
         let date = new Date(stringDate);
-        console.log(date.toLocaleTimeString('es-AR'));
+        return date.toLocaleTimeString('es-AR').slice(0, -3);
+    }
+    const stringToDate = (stringDate) => {
+        let date = new Date(stringDate);
+        return (date.toLocaleDateString('es-AR'));
     }
 
 
@@ -81,16 +86,16 @@ const MyReservationsView = () => {
                                     Hora: {stringToTime(reservation.hora_reserva)}
                                 </Text>
                                 <Text style={[styles.mediumText, {width: '60%', marginLeft: '2%'}]}>
-                                    Fecha: 04/04/2020
+                                    Fecha: {stringToDate(reservation.hora_reserva)}
                                 </Text>
                             </View>
                             <View style={{width: '100%', height: '10%'}}/>
                             <View style={styles.textRow}>
                                 <Text style={[styles.mediumText, {width: '45%', marginLeft: '2%'}]}>
-                                    N* de sillas: 1
+                                    N* de sillas: {reservation.cantidad_personas}
                                 </Text>
-                                <Text style={[styles.mediumText, {width: '55%', marginLeft: '2%'}]}>
-                                    Estado: Aceptada
+                                <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.mediumText, {width: '55%', marginLeft: '2%'}]}>
+                                    Estado: {reservation.status}
                                 </Text>
                             </View>
                         </View>

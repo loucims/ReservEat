@@ -1,99 +1,70 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity, Button, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 //----------------------------------------------------------\\
 import MainView from '../components/MainView';
 import Map from '../components/Map';
 import { foodCategories } from '../utils/categories';
 import { colors } from '../utils/colors';
-
-const TestScreen = ({navigation}) => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    
-
-    return (
-        <MainView statusColor={'light-content'} safeAreaTopColor={colors.dim_red} safeAreaBottomColor={colors.dim_red}>
-            <View style={styles.container}>
-                <Text style={styles.title}>ReservEat</Text>
-                <View style={styles.backdrop}>
-                    
-                </View>
-            </View>
-        </MainView>
-    );
-  }
+import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
+const TestScreen = () => {
+    const [date, setDate] = useState(new Date(1598051730000));
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
   
-  const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center'
-    },
-    title: {
-        fontSize: 40,
-        fontFamily: 'Aveni-Heavy',
-        color: colors.black,
-        paddingTop: '15%',
-        paddingBottom: '10%',
-        textAlign: 'center'
-    },
-    backdrop: {
-        flex: 0.95,
-        width: '90%',
-        paddingBottom: '50%',
-        backgroundColor: colors.black,
-        borderRadius: 10,
-        justifyContent: 'flex-end',
-        alignItems: 'center'
-    },
-    button: {
-        backgroundColor: colors.white,
-        borderRadius: 50,
-        width: 150,
-        height: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 30
-    },
-    buttonText: {
-        fontFamily: 'Aveni-Medium',
-        fontSize: 25 
-    },
-    text: {
-        fontFamily: 'Aveni-Medium',
-        fontSize: 17,
-        color: colors.white,
-        paddingBottom: 30,
-    },
-    registerText: {
-        fontFamily: 'Aveni-Medium',
-        fontSize: 17,
-        textDecorationLine: 'underline',
-        color: colors.white,
-        paddingBottom: 30
-    },
-    internalContainer: {
-        flex: 0,
-        width: '100%',
-        height: '100%'
-    },
-    inputField: {
-        alignSelf: 'stretch',
-
-    },
-    input: {
-        width: 300,
-        height: 55,
-        paddingLeft: 20,
-        color: colors.white,
-        fontFamily: 'Aveni-Medium'
-    },
-    line: {
-        backgroundColor: colors.white,
-        alignSelf: 'stretch',
-        height: 1
-    }
-});
+    const onChange = (event, selectedDate) => {
+      const currentDate = selectedDate;
+      setShow(false);
+      setDate(currentDate);
+    };
+  
+    const showMode = (currentMode) => {
+      if (Platform.OS === 'android') {
+        setShow(false);
+        // for iOS, add a button that closes the picker
+      }
+      setMode(currentMode);
+    };
+  
+    const showDatepicker = () => {
+      showMode('date');
+    };
+  
+    const showTimepicker = () => {
+      showMode('time');
+    };
+  
+    return (
+      <View style={{flex:1}}>
+        <Button onPress={showDatepicker} title="Show date picker!" />
+        <Button onPress={showTimepicker} title="Show time picker!" />
+        <Text>selected: {date.toLocaleString()}</Text>
+        {show && (
+          <RNDateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode={mode}
+            is24Hour={true}
+            onChange={onChange}
+          />
+        )}
+        <RNDateTimePicker            t
+        estID="dateTimePicker"
+            value={date}
+            mode={'datetime'}
+            minimumDate={new Date()}
+            is24Hour={true}
+            onChange={onChange}/>
+        <RNDateTimePicker            t
+        estID="dateTimePicker"
+            value={date}
+            mode={'time'}
+            minimumDate={new Date()}
+            is24Hour={true}
+            onChange={onChange}/>
+      </View>
+    );
+  };
 
 export default TestScreen;

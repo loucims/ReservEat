@@ -24,7 +24,6 @@ const Map = ({navigation}) => {
 
     useEffect(() =>{
         console.log('animated to')
-        console.log(initialRegion)
         mapView.current.animateToRegion(initialRegion, 1000);
     },[initialRegion])
 
@@ -86,8 +85,8 @@ const styles = StyleSheet.create({
         height: 30
     },
     map: {
-      width: '100%',
-      height: '78%' 
+        position: 'relative',
+        flex: 1,
     }
   });
 

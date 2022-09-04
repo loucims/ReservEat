@@ -15,6 +15,15 @@ const LogInView = ({navigation}) =>{
 
     const [error, setError] = useState('');    
 
+    const storeData = async (value) => {
+        try {
+            await AsyncStorage.setItem('user_id', value)
+            console.log('Storing')
+        } catch (e) {
+          // saving error
+        }
+      }
+
     const verifyCredentials = () =>{
         if (username === '' || password === ''){
             setError('Por favor, ingrese su email y contraseña');
@@ -24,7 +33,7 @@ const LogInView = ({navigation}) =>{
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
-        fetch('http://localhost:8080/clientes/login', {
+        fetch('https://reserv-eat-backend.vercel.app/clientes/login', {
             method: 'POST',
             headers: myHeaders,
             body: JSON.stringify({
@@ -34,12 +43,15 @@ const LogInView = ({navigation}) =>{
         })
         .then((response) => {
             if (response.status === 200){
-                response.json().then(data => {console.log(data.id_cliente)});
+                response.json().then(data => {storeData(data.id_cliente.toString())});
                 setError('');
                 navigation.navigate('Home')
             } else {
                 setError('Usuario o contraseña incorrectos');
             }
+        }).catch(error => {
+            console.log('error verifying credentials',error)
+            setError('Algo salió mal, intente nuevamente');
         }).done();
     }
     

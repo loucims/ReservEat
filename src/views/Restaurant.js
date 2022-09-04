@@ -4,6 +4,7 @@ import SwipeUpDown from 'react-native-swipe-up-down';
 //import { Picker, DatePicker } from 'react-native-wheel-pick';
 //import HorizontalPicker from '@vseslav/react-native-horizontal-picker';
 import { PickerTime, DropdownList } from 'react-native-ultimate-modal-picker';
+import DateTimePicker from '@react-native-community/datetimepicker'
 
 //----------------------------------------------------------\\
 import { restaurantsMapInfo } from '../utils/coordinates';
@@ -15,11 +16,13 @@ import { scale, verticalScale, moderateScale } from '../utils/scaling';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const RestaurantView = ({navigation}) => {
+const RestaurantView = ({navigation, restaurant, userId}) => {
     
     const modal = useRef();
-    const [time, setTime] = useState(new Date());
-    const [ listValue, setListValue ] = useState('');
+    const [datetime, setDateTime] = useState(new Date());
+    const [ numberOfPeople, setNumberOfPeople ] = useState(1);
+    const [aclaration, setAclaration] = useState('');
+
     const items = [
         { label: '1', value: '1' },
         { label: '2', value: '2' },
@@ -30,6 +33,158 @@ const RestaurantView = ({navigation}) => {
         { label: '7', value: '7' },
         { label: '8+', value: '8+' },
     ];
+
+    const SendReservation = ({restaurantId, userId}) => {
+        restaurantId = 1
+        userId = 1
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        
+        var raw = JSON.stringify({
+          "cantidad_personas": numberOfPeople,
+          "hora_reserva": datetime.toISOString(),
+          "aclaracion": aclaration,
+          "id_cliente": userId,
+        });
+        
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow'
+        };
+        
+        fetch(`https://reserv-eat-backend.vercel.app/restaurantes/${restaurantId}/reserva`, requestOptions)
+          .then(response => response.text())
+          .then(result => console.log(result))
+          .catch(error => console.log('error', error));
+    }
+
+
+    const RenderModal = ({close}) => {
+        return (                    
+        <View style={styles.reservationView}>
+            <Text style={{fontFamily: 'Aveni-Heavy', fontSize: scale(30), marginTop: '5%', marginBottom: '2%'}}>Tu Reserva</Text>
+                <View style={{backgroundColor: colors.black, width: '80%', height: '0.1%', marginBottom: '15%'}}/>
+                <PickerTime
+                title="Hora y fecha"
+                onChange={(date) => setDateTime(date)}
+                mode="spinner"         
+                customStyleLabelText={{
+                    labelTextLight: {
+                      fontFamily: 'Aveni-Heavy',
+                      fontSize: 22,
+                      fontWeight: '800',
+                      textTransform: 'none',
+                      color: colors.black,
+                    },
+                    labelTextDark: {
+                      fontFamily: 'Aveni-Heavy',
+                      fontSize: 22,
+                      fontWeight: '800',
+                      textTransform: 'none',
+                      color: colors.black,
+                    },
+                }}
+                />
+                <View style={{width: '100%', height: '3%'}}/>
+                <DropdownList
+                title="Numero de personas"
+                items={items}
+                defaultValue={1}
+                onChange={(value) => setNumberOfPeople(value)}
+                customStyleLabelText={{
+                    labelTextLight: {
+                      fontFamily: 'Aveni-Heavy',
+                      fontSize: 22,
+                      fontWeight: '800',
+                      textTransform: 'none',
+                      color: colors.black,
+                    },
+                    labelTextDark: {
+                      fontFamily: 'Aveni-Heavy',
+                      fontSize: 22,
+                      fontWeight: '800',
+                      textTransform: 'none',
+                      color: colors.black,
+                    },
+                }}
+                customStyleFieldText={{
+                    fieldTextLight: {
+                      fontFamily: 'Aveni-Regular',
+                      fontSize: 22,
+                      fontWeight: '800',
+                      textTransform: 'lowercase',
+                      color: colors.black,
+                    },
+                    fieldTextDark: {
+                      fontFamily: 'Aveni-Regular',
+                      fontSize: 22,
+                      fontWeight: '800',
+                      textTransform: 'lowercase',
+                      color: colors.black,
+                    },
+                  }}
+                  customStyleCancelText={{
+                    cancelTextLight: {
+                      fontFamily: 'Aveni-Medium',
+                      fontSize: 22,
+                      fontWeight: '800',
+                      color: colors.black,
+                    },
+                    cancelTextDark: {
+                      fontFamily: 'Aveni-Medium',
+                      fontSize: 22,
+                      fontWeight: '800',
+                      color: colors.black,
+                    },
+                  }}
+                  customStyleDoneText={{
+                    doneTextLight: {
+                        fontFamily: 'Aveni-Medium',
+                        fontSize: 22,
+                        fontWeight: '800',
+                        color: colors.black,
+                    },
+                    doneTextDark: {
+                        fontFamily: 'Aveni-Medium',
+                        fontSize: 22,
+                        fontWeight: '800',
+                        color: colors.black,
+                    },
+                  }}/>
+                <View style={{width: '100%', height: '3%'}}/>
+                <Text style={{
+                    fontFamily: 'Aveni-Heavy',
+                    fontSize: 22,
+                    fontWeight: '800',
+                    color: colors.black,
+                    alignSelf: 'flex-start',
+                    marginLeft: '6%',
+                    marginBottom: '4%'
+                }}
+                > 
+                    Aclaraciones
+                </Text>
+                <View style={{borderWidth: 1, width: '90%', height: '20%', justifyContent: 'flex-start', alignItems: 'flex-start', borderRadius: 8, borderColor: colors.gray}}>
+                    <TextInput style={[styles.textInput, {fontSize: 20}]} multiline={true} 
+                        selectionColor={colors.black}
+                        blurOnSubmit={true}
+                        placeholder={'Algo que aclarar?'}
+                        placeholderTextColor={colors.gray}>
+                    </TextInput>
+                </View>
+
+                <TouchableOpacity style={styles.confirmButton} onPress={() => {
+                    SendReservation(restaurant.id_restaurant, userId)
+
+                }}> 
+                    <Text style={[styles.buttonText, {color: colors.white}]}>Confirmar reserva</Text>
+                </TouchableOpacity>
+        </View>)
+
+    }
+
     
     return(
         <MainView statusColor={'dark-content'} safeAreaTopColor={colors.white} safeAreaBottomColor={colors.red}>
@@ -43,135 +198,17 @@ const RestaurantView = ({navigation}) => {
             </View>
 
             
-            <SwipeUpDown
-                itemFull={(close) => (
-                    <View style={styles.reservationView}>
-                        <Text style={{fontFamily: 'Aveni-Heavy', fontSize: scale(30), marginTop: '5%', marginBottom: '2%'}}>Tu Reserva</Text>
-                            <View style={{backgroundColor: colors.black, width: '80%', height: '0.1%', marginBottom: '15%'}}/>
-                            <PickerTime
-                            title="Hora y fecha"
-                            onChange={(date) => setTime(date)}
-                            mode="spinner"         
-                            customStyleLabelText={{
-                                labelTextLight: {
-                                  fontFamily: 'Aveni-Heavy',
-                                  fontSize: 22,
-                                  fontWeight: '800',
-                                  textTransform: 'none',
-                                  color: colors.black,
-                                },
-                                labelTextDark: {
-                                  fontFamily: 'Aveni-Heavy',
-                                  fontSize: 22,
-                                  fontWeight: '800',
-                                  textTransform: 'none',
-                                  color: colors.black,
-                                },
-                            }}
-                            />
-                            <View style={{width: '100%', height: '3%'}}/>
-                            <DropdownList
-                            title="Numero de personas"
-                            items={items}
-                            onChange={(value) => setListValue(value)}
-                            customStyleLabelText={{
-                                labelTextLight: {
-                                  fontFamily: 'Aveni-Heavy',
-                                  fontSize: 22,
-                                  fontWeight: '800',
-                                  textTransform: 'none',
-                                  color: colors.black,
-                                },
-                                labelTextDark: {
-                                  fontFamily: 'Aveni-Heavy',
-                                  fontSize: 22,
-                                  fontWeight: '800',
-                                  textTransform: 'none',
-                                  color: colors.black,
-                                },
-                            }}
-                            customStyleFieldText={{
-                                fieldTextLight: {
-                                  fontFamily: 'Aveni-Regular',
-                                  fontSize: 22,
-                                  fontWeight: '800',
-                                  textTransform: 'lowercase',
-                                  color: colors.black,
-                                },
-                                fieldTextDark: {
-                                  fontFamily: 'Aveni-Regular',
-                                  fontSize: 22,
-                                  fontWeight: '800',
-                                  textTransform: 'lowercase',
-                                  color: colors.black,
-                                },
-                              }}
-                              customStyleCancelText={{
-                                cancelTextLight: {
-                                  fontFamily: 'Aveni-Medium',
-                                  fontSize: 22,
-                                  fontWeight: '800',
-                                  color: colors.black,
-                                },
-                                cancelTextDark: {
-                                  fontFamily: 'Aveni-Medium',
-                                  fontSize: 22,
-                                  fontWeight: '800',
-                                  color: colors.black,
-                                },
-                              }}
-                              customStyleDoneText={{
-                                doneTextLight: {
-                                    fontFamily: 'Aveni-Medium',
-                                    fontSize: 22,
-                                    fontWeight: '800',
-                                    color: colors.black,
-                                },
-                                doneTextDark: {
-                                    fontFamily: 'Aveni-Medium',
-                                    fontSize: 22,
-                                    fontWeight: '800',
-                                    color: colors.black,
-                                },
-                              }}/>
-                            <View style={{width: '100%', height: '3%'}}/>
-                            <Text style={{
-                                fontFamily: 'Aveni-Heavy',
-                                fontSize: 22,
-                                fontWeight: '800',
-                                color: colors.black,
-                                alignSelf: 'flex-start',
-                                marginLeft: '6%',
-                                marginBottom: '4%'
-                            }}
-                            > 
-                                Aclaraciones
-                            </Text>
-                            <View style={{borderWidth: 1, width: '90%', height: '20%', justifyContent: 'flex-start', alignItems: 'flex-start', borderRadius: 8, borderColor: colors.gray}}>
-                                <TextInput style={[styles.textInput, {fontSize: 20}]} multiline={true} 
-                                    selectionColor={colors.black}
-                                    blurOnSubmit={true}
-                                    placeholder={'Algo que aclarar?'}
-                                    placeholderTextColor={colors.gray}>
-                                </TextInput>
-                            </View>
-
-                            <TouchableOpacity style={styles.confirmButton}> 
-                                <Text style={[styles.buttonText, {color: colors.white}]}>Confirmar reserva</Text>
-                            </TouchableOpacity>
-                    </View>
-                  )}
+            <SwipeUpDown itemFull={(close) => ( RenderModal({close}) )}
                 animation="spring"
                 disableSwipeIcon
                 extraMarginTop={24}
                 iconColor='yellow'
                 iconSize={30}
                 ref={modal}
-                onBlur={
-                    () => {
-                        console.log('hi')
-                        modal.current.closeFull()
-                    }
+                onBlur={() => {
+                    console.log('hi')
+                    modal.current.closeFull()
+                  }
                 }
                 style={{ backgroundColor: 'rgba(255, 255, 255, 1)', borderTopRightRadius: 40, borderTopLeftRadius: 40,
                 shadowColor: '#000',

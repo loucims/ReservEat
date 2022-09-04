@@ -28,7 +28,7 @@ const RegisterView = ({navigation}) =>{
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
-        fetch('http://localhost:8080/clientes', {
+        fetch('https://reserv-eat-backend.vercel.app/clientes', {
             method: 'POST',
             headers: myHeaders,
             body: JSON.stringify({
@@ -43,6 +43,9 @@ const RegisterView = ({navigation}) =>{
             } else if (response.status === 409) {
                 setError('El email ya está registrado');
             }
+        }).catch(error => {
+            console.log('error creating account',error)
+            setError('Algo salió mal, intente nuevamente');
         }).done();
 
     }

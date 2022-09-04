@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 //----------------------------------------------------------\\
 import DiscoveryView from '../screens/Discovery';
 import MyReservationsView from '../screens/MyReservations';
@@ -23,35 +24,65 @@ const reservesPressed = require("../../assets/icons/statusBar/reserves-pressed.p
 const HomeView = ({navigation}) => {
     const [currentScreen, setCurrentScreen] = useState('Discovery');
     const [topColor, setTopColor] = useState(colors.red);
+    const [bottomColor, setBottomColor] = useState(colors.red);
     const [statusTheme, setStatusTheme] = useState('light-content');
+    const [user_id, setUser_id] = useState(null);
 
+    const [hidesStatusBar, setHidesStatusBar] = useState(false);
+
+    useEffect(() => {
+        getData('user_id')
+    },[])
+
+    const getData = async (key) => {
+        try {
+        const value = await AsyncStorage.getItem(key)
+        if(value !== null) {
+            setUser_id(parseInt(value))
+            console.log(value)
+            // value previously stored
+        }
+        } catch(e) {
+            console.log(e)
+        // error reading value
+        }
+    }
 
     const RenderCurrentView = () => {
         switch(currentScreen){
             case 'User':
                 break
             case 'Discovery':
-                return(<DiscoveryView navigation={navigation}/>)
+                return(<DiscoveryView userId={user_id} navigation={navigation} showStatus={showStatusBar} hideStatus={hideStatusBar}/>)
             case 'Reservations':
-                return(<MyReservationsView navigation={navigation}/>)
+                return(<MyReservationsView userId={user_id} navigation={navigation}/>)
         }
+    }
+
+    const hideStatusBar = () => {
+        setHidesStatusBar(true);
+        setBottomColor(colors.bone);
+    }
+
+    const showStatusBar = () => {
+        setHidesStatusBar(false);
+        setBottomColor(colors.red);
     }
 
 
     return(
-        <MainView statusColor={statusTheme} safeAreaTopColor={topColor} safeAreaBottomColor={colors.red} justify={'flex-end'}>
+        <MainView statusColor={statusTheme} safeAreaTopColor={topColor} safeAreaBottomColor={bottomColor} justify={'flex-end'}>
 
 
             {RenderCurrentView()}
 
-
-            <View style={styles.statusBarView}>
+            <View style={[styles.statusBarView, {opacity: hidesStatusBar ? 0 : 1}]}>
                 <View style={styles.statusBar}>
                     <TouchableOpacity onPress={() => {
                         setCurrentScreen('User');
                         setTopColor(colors.red);
                         setStatusTheme('light-content');
-                    }}>
+                    }} disabled={hidesStatusBar}>
                         <Image source={currentScreen == 'User' ? userPressed : user} style={styles.icon}/>
                     </TouchableOpacity>
 
@@ -59,7 +90,7 @@ const HomeView = ({navigation}) => {
                         setCurrentScreen('Discovery');
                         setTopColor(colors.red);
                         setStatusTheme('light-content');
-                    }}>
+                    }} disabled={hidesStatusBar}>
                         <Image source={currentScreen == 'Discovery' ? mapPressed : map} style={[styles.icon, {marginLeft: '1.5%'}]} />
                     </TouchableOpacity>
 
@@ -67,56 +98,21 @@ const HomeView = ({navigation}) => {
                         setCurrentScreen('Reservations');
                         setTopColor('#F9F6EE');
                         setStatusTheme('dark-content');
-                    }}>
+                    }} disabled={hidesStatusBar}>
                         <Image source={currentScreen == 'Reservations' ? reservesPressed : reserves} style={styles.icon}/>
                     </TouchableOpacity>
                 </View>
             </View>
-            
+
         </MainView>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      backgroundColor: colors.black,
-      padding: Platform.OS === 'android' ? StatusBarNative.currentHeight : 0
-    },
-    discoveryBarView: {
-        width: '100%',
-        height: '13%',
-        backgroundColor: colors.red
-    },
-    discoveryBar: {
-        flexDirection:'row',
-        marginTop: RFPercentage(0.1)
-    },
-    scrollDiscoveryBar: {
-        width: '100%',
-        height: '13%'  
-    },
-    categoryButton: {
-        backgroundColor: colors.white,
-        borderRadius: 50,
-        width: '20%',
-        height: 30,
-        marginHorizontal: 10,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    category: {
-        fontFamily: 'Aveni-Heavy',
-        color: colors.black
-    },
-
-
-
     statusBarView: {
         backgroundColor: colors.red,
         width: '100%',
-        height: '10%'
+        height: '10%',
     },
     statusBar: {
         flexDirection:'row',
@@ -132,60 +128,10 @@ const styles = StyleSheet.create({
         width: 24,
         height: 24
     },
-    line: {
-        backgroundColor: colors.white,
-        width: 325,
-        height: 1
-    },
-    input: {
-        width: 300,
-        height: 55,
-        marginBottom: -10,
-        color: colors.white,
-        fontFamily: 'Aveni-Medium'
-    },
+    touchableButton: {
+        
+    }
 
-
-    //Reservations
-    titleContainer: {
-        width: '100%',
-        height: '10%',
-        marginTop: '5%',
-        backgroundColor: colors.red,
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.7,
-        shadowRadius: 1,  
-        elevation: 5,
-    },
-    title: {
-        fontFamily: 'Aveni-Heavy',
-        color: colors.white,
-        fontSize: RFValue(20),
-        marginHorizontal: '2%'
-    },
-    titleLine: {
-        width: '25%',
-        height: '3%',
-        backgroundColor: colors.white,
-    },
-    reservationContainer: {
-        height: 0.18 * windowHeight,
-        width: '95%',
-        borderRadius: 6,
-        backgroundColor: colors.white,
-        alignSelf: 'center',
-        justifyContent: 'center',
-        marginTop: '3%',
-        shadowColor: '#000',
-        shadowOffset: { width: 1, height: 0.5 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,  
-        elevation: 5
-    },
-    
-  });
+});
 
 export default HomeView;

@@ -27,6 +27,7 @@ const App = () => {
       return null
   }
 
+  //return (<HomeView/>)
   return (
     <View style={styles.container}>
       <NavigationContainer>
