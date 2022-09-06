@@ -24,6 +24,7 @@ const ReservationConfirmation = ({ route, navigation }) => {
     const [sent, setSent] = useState(false);
 
     const rippleAnim = useRef(new Animated.Value(0.1)).current
+    const fontAnim = useRef(new Animated.Value(RFValue(25))).current
 
     useEffect(() => {
         postReservation({reservationRaw: reservationBody, restaurantId: restaurantId})
@@ -43,17 +44,17 @@ const ReservationConfirmation = ({ route, navigation }) => {
             redirect: 'follow'
         };
         
-        fetch(`https://reserv-eat-backend.vercel.app/restaurantes/${restaurantId}/reserva`, requestOptions)
+        fetch(`http://localhost:8080/restaurantes/${restaurantId}/reserva`, requestOptions)
         .then(response => response.text())
         .then(result => {
-            setLoading(false);
             console.log(result);
+            setLoading(false);
             setSuccesful(true);
             sentAnim.current?.play();
         })
         .catch(error => {
-            setLoading(false);
             console.log('error', error);
+            setLoading(false);
             setSuccesful(false);
             errorAnim.current?.play();
         });
@@ -113,14 +114,34 @@ const ReservationConfirmation = ({ route, navigation }) => {
             style={{position: 'absolute'}}
             source={errorAnimation}
             ref={errorAnim}
-            loop={true}
-            speed={0.5}
+            loop={false}
+            speed={0.8}
             onAnimationFinish={() => {
-
+              Animated.sequence([                
+                Animated.timing(fontAnim, {                      
+                toValue: 1,
+                duration: 150,
+                easing: Easing.bouncer,
+                useNativeDriver: false,
+              }),
+                Animated.timing(rippleAnim, {                      
+                toValue: 150,
+                duration: 500,
+                easing: Easing.bouncer,
+                useNativeDriver: false,
+              }),
+              Animated.timing(rippleAnim, {                      
+                toValue: 150,
+                duration: 500,
+                useNativeDriver: false,
+              })]).start(() => {
+                navigation.replace('Home', {screenToGo: 'Discovery'})
+              })
         }}/>}
 
-        <Animated.View style={[styles.ripple, {transform: [{scale: rippleAnim}]}]}/>
+        <Animated.View style={[styles.ripple, {transform: [{scale: rippleAnim}], backgroundColor: succesful ? colors.red : '#FF413A' }]}/>
         {sent && <Text style={styles.splashText}>Reserva enviada!</Text>}
+        {!succesful && <Animated.Text style={[styles.errorText, {top: '20%', fontSize: fontAnim}]}>Ha ocurrrido un error..</Animated.Text>}
 
       </View>
     </MainView>
@@ -146,6 +167,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Heavy',
     color: colors.white,
   },
+  errorText: {
+    fontFamily: 'Avenir-Heavy',
+    color: colors.black,
+  }
 });
 
 export default ReservationConfirmation;
