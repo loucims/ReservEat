@@ -20,8 +20,6 @@ const reservesPressed = require("../../assets/icons/statusBar/reserves-pressed.p
 
 const HomeView = ({route, navigation}) => {
 
-    //const { screenToGo } = route.params;
-
     const [topColor, setTopColor] = useState(colors.red);
     const [bottomColor, setBottomColor] = useState(colors.red);
     const [statusTheme, setStatusTheme] = useState('light-content');
@@ -35,8 +33,8 @@ const HomeView = ({route, navigation}) => {
         if (route.params){ 
             console.log('route.params: ' + route.params.screenToGo);
             setCurrentScreen(route.params.screenToGo);
-            setTopColor(colors.bone);
-            setStatusTheme('dark-content');
+            setTopColor(route.params.topSafeAreaColor);
+            setStatusTheme(route.params.statusTheme);
         }
         
         getData('user_id')

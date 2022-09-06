@@ -105,7 +105,7 @@ const ReservationConfirmation = ({ route, navigation }) => {
                   easing: Easing.bouncer,
                   useNativeDriver: false,
                 })]).start(() => {
-                  navigation.replace('Home', {screenToGo: 'Reservations'})
+                  navigation.replace('Home', {screenToGo: 'Reservations', statusTheme: 'dark-content', topSafeAreaColor: colors.bone})
                 })
         }}/>}
 
@@ -119,7 +119,7 @@ const ReservationConfirmation = ({ route, navigation }) => {
             onAnimationFinish={() => {
               Animated.sequence([                
                 Animated.timing(fontAnim, {                      
-                toValue: 1,
+                toValue: 0.1,
                 duration: 150,
                 easing: Easing.bouncer,
                 useNativeDriver: false,
@@ -135,7 +135,7 @@ const ReservationConfirmation = ({ route, navigation }) => {
                 duration: 500,
                 useNativeDriver: false,
               })]).start(() => {
-                navigation.replace('Home', {screenToGo: 'Discovery'})
+                navigation.replace('Home', {screenToGo: 'Discovery', statusTheme: 'light-content', topSafeAreaColor: colors.red})
               })
         }}/>}
 
