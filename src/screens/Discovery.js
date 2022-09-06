@@ -14,6 +14,7 @@ const windowWidth = Dimensions.get('window').width;
 const DiscoveryView = ({navigation, userId, showStatus, hideStatus}) => {
 
     const [searchField, setSearchField] = useState('');
+    const [placeholder, setPlaceholder] = useState('Buscar..');
     const [restaurants, setRestaurants] = useState([]);
     const [focused, setFocused] = useState(false);
 
@@ -37,14 +38,24 @@ const DiscoveryView = ({navigation, userId, showStatus, hideStatus}) => {
             <View style={styles.discoveryBarView}>
                 <View style={styles.discoveryBar}>
                     <View style={styles.searchBarContainer}>
-                        <Image source={require("../../assets/icons/discoveryBar/search-regular-24.png")} style={styles.searchIcon} marginHorizontal={'5%'} marginTop={RFPercentage(1.5)}/>
+                        <Image source={require("../../assets/icons/discoveryBar/search-regular-24.png")} style={styles.searchIcon} marginHorizontal={'5%'} marginTop={RFPercentage(0.25)}/>
                         <View style={{width: 1.5, height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.2)', position: 'absolute', left: '14.6%'}}/>
                         <View style={{flex: 0.9, justifyContent: 'flex-end', marginLeft: '1%'}}>
                             <TextInput onChangeText={(input) =>{setSearchField(input)}} style={styles.input} 
-                            fontSize={RFValue(15)} placeholder="Buscar.." placeholderTextColor={colors.black}
+                            fontSize={RFValue(14)} placeholder={placeholder} placeholderTextColor={colors.black}
                             selectionColor={colors.black}
-                            onFocus={() => {hideStatus(); setFocused(true);}}
-                            onBlur={() => {showStatus(); setFocused(false);}}/>
+                            onFocus={() => {
+                                hideStatus(); 
+                                setFocused(true);
+                                setPlaceholder('');
+                            }}
+                            onBlur={() => {
+                                if (searchField == ''){
+                                    showStatus(); 
+                                    setFocused(false);
+                                    setPlaceholder('Buscar..');
+                                }
+                            }}/>
                         </View>
                     </View>
                 </View>
@@ -76,10 +87,51 @@ const DiscoveryView = ({navigation, userId, showStatus, hideStatus}) => {
                 <ScrollView>
 
                     <View style={{height: 10, width: '100%'}}/>
+
                     {restaurants.map(restaurant => (
-                    <View key={restaurant.id_restaurante} style={styles.restaurantContainer}>
-                        
-                    </View>
+                    <TouchableOpacity key={restaurant.id_restaurante} onPress={() => {
+                        navigation.navigate('Restaurant', {restaurant: restaurant, userId: userId})
+                    }}>
+                        <View style={styles.restaurantContainer}>
+                            <View style={styles.restaurantIconContainer}>
+                                <Image source={require("../../assets/testbuti.jpg")} style={styles.restaurantIcon}/>
+                            </View>
+
+                            <View style={styles.infoRestaurantContainer}>
+                                <View style={styles.nameContainer}>
+                                    <Text numberOfLines={1} style={{flex: 1,fontSize: RFValue(15), color: colors.black, fontFamily: 'Aveni-HeavyItalic'}}>
+                                        {restaurant.nombre}
+                                    </Text>
+
+                                    <View style={{width: '15%', height: '110%', borderRadius: 4, position: 'absolute', right: 0, bottom: '25%',
+                                    borderWidth: 1, borderColor: colors.black, justifyContent: 'center', flexDirection: 'row'}}>
+                                        <View style={{width: '35%', height: '100%', justifyContent: 'center', alignItems: 'center',
+                                            marginTop: '3%',
+                                        }}>
+                                            <Text style={{fontSize: RFValue(12), color: colors.black, fontFamily: 'Aveni-Heavy'}}>
+                                                5
+                                            </Text>
+                                        </View>
+
+                                        <View style={styles.starIconContainer}>
+                                            <Image style={styles.starIcon} source={require("../../assets/icons/star-solid.png")}/>
+                                        </View>
+                                    </View>
+
+                                </View>
+
+                                <View style={styles.descriptionContainer}>
+                                    <Text  numberOfLines={2} style={{flex: 1,fontSize: RFValue(11), color: colors.black, fontFamily: 'Aveni-Medium'}}>
+                                        {restaurant.descripcion}
+                                    </Text>
+
+                                    <View style={{position: 'absolute', backgroundColor: colors.dim_red, width: '100%', height: '5%',
+                                    top: '-20%', right: '2%', justifyContent: 'center', alignItems: 'center'}}/>
+                                </View>
+                            </View>
+                            
+                        </View>
+                    </TouchableOpacity>
                     ))}
 
                 </ScrollView>}
@@ -109,6 +161,7 @@ const styles = StyleSheet.create({
     },
     searchBarContainer: {
         flexDirection: 'row',
+        alignItems: 'center',
         width: '95%',
         height: '95%',
         borderRadius: 20,
@@ -126,8 +179,9 @@ const styles = StyleSheet.create({
     input: {
         width: '105%',
         height: '90%',
+        marginTop: RFPercentage(0.25),
         color: colors.black,
-        fontFamily: 'Aveni-Medium'
+        fontFamily: 'Aveni-Medium',
     },
     categoryButton: {
         backgroundColor: colors.white,
@@ -141,8 +195,8 @@ const styles = StyleSheet.create({
         color: colors.black
     },
     searchIcon:{
-        width: verticalScale(20),
-        height: verticalScale(20)
+        width: verticalScale(19),
+        aspectRatio: 1,
         //26
     },
     line: {
@@ -160,8 +214,8 @@ const styles = StyleSheet.create({
         marginBottom: '3.5%',
         borderRadius: 6,
         backgroundColor: colors.white,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
+        flexDirection: 'row',
+        alignItems: 'center',
         alignSelf: 'center',
         shadowColor: '#000',
         shadowOffset: { width: 1, height: 0.5 },
@@ -172,16 +226,52 @@ const styles = StyleSheet.create({
     restaurantBackground: {
         width: '100%',
         height: 0.05 * windowHeight,
-       // resizeMode: 'contain',
     },
     restaurantIconContainer: {
-
+        height: '80%',
+        aspectRatio: 1,
+        borderRadius: 15,
+        borderWidth: 1.5,
+        borderColor: colors.dim_red,
+        marginHorizontal: '3%',
+        overflow: 'hidden',
     },
-    restaurantIcon: {},
-    nameContainer: {},
-    nameLine: {},
-    descriptionContainer:{},
-
+    restaurantIcon: {
+        flex: 1,
+        width: null,
+        height: null,
+        resizeMode: 'contain',
+    },
+    infoRestaurantContainer: {
+        width: '74%',
+        height: '85%',
+        flexDirection: 'column',
+    },
+    nameContainer: {
+        width: '100%',
+        height: '25%',
+        marginTop: '2.5%',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+    descriptionContainer:{
+        width: '95%',
+        height: '50%',
+        marginTop: '3%',
+        marginLeft: '-2%',
+    },
+    starIconContainer: {
+        width: '50%',
+        height: '100%',
+        marginRight: '-5%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    starIcon: {
+        height: '95%',
+        aspectRatio: 1
+        
+    },
 
 
 

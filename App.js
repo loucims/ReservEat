@@ -11,6 +11,7 @@ import LogInView from './src/views/LogIn';
 import RegisterView from './src/views/Register';
 import HomeView from './src/views/Home';
 import RestaurantView from './src/views/Restaurant';
+import ReservationConfirmation from './src/screens/SentReservation';
 import MainView from './src/components/MainView';
 import TestScreen from './src/views/TestScreen';
 
@@ -22,12 +23,12 @@ const App = () => {
     'Aveni-Heavy': require('./assets/fonts/Avenir/Metropolis-SemiBold.otf'),
     'Aveni-Medium': require('./assets/fonts/Avenir/Metropolis-Medium.otf'),
     'Aveni-Regular': require('./assets/fonts/Avenir/Metropolis-Regular.otf'),
+    'Aveni-HeavyItalic': require('./assets/fonts/Avenir/Metropolis-SemiBoldItalic.otf'),
   })
   if (!loaded){
       return null
   }
 
-  //return (<HomeView/>)
   return (
     <View style={styles.container}>
       <NavigationContainer>
@@ -44,6 +45,8 @@ const App = () => {
             <Stack.Screen name={"Restaurant"} component={RestaurantView}/>
             
             <Stack.Screen name={"Home"} component={HomeView} options={{animation: 'fade', gestureEnabled: false}}/>
+
+            <Stack.Screen name={"ReservationConfirmation"} component={ReservationConfirmation} options={{animation: 'fade', gestureEnabled: false}}/>
           </Stack.Navigator>
         </>
       </NavigationContainer>

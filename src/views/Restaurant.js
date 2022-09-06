@@ -16,11 +16,17 @@ import { scale, verticalScale, moderateScale } from '../utils/scaling';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const RestaurantView = ({navigation, restaurant, userId}) => {
+const sendAnimation = require('../../assets/animations/sent-reservation.json')
+const errorAnimation = require('../../assets/animations/error.json')
+const loadAnimation = require('../../assets/animations/loading.json')
+
+const RestaurantView = ({route, navigation}) => {
     
+    const { restaurant, userId } = route.params;
+
     const modal = useRef();
     const [datetime, setDateTime] = useState(new Date());
-    const [ numberOfPeople, setNumberOfPeople ] = useState(1);
+    const [numberOfPeople, setNumberOfPeople ] = useState(1);
     const [aclaration, setAclaration] = useState('');
 
     const items = [
@@ -33,33 +39,6 @@ const RestaurantView = ({navigation, restaurant, userId}) => {
         { label: '7', value: '7' },
         { label: '8+', value: '8+' },
     ];
-
-    const SendReservation = ({restaurantId, userId}) => {
-        restaurantId = 1
-        userId = 1
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        
-        var raw = JSON.stringify({
-          "cantidad_personas": numberOfPeople,
-          "hora_reserva": datetime.toISOString(),
-          "aclaracion": aclaration,
-          "id_cliente": userId,
-        });
-        
-        var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: raw,
-          redirect: 'follow'
-        };
-        
-        fetch(`https://reserv-eat-backend.vercel.app/restaurantes/${restaurantId}/reserva`, requestOptions)
-          .then(response => response.text())
-          .then(result => console.log(result))
-          .catch(error => console.log('error', error));
-    }
-
 
     const RenderModal = ({close}) => {
         return (                    
@@ -171,14 +150,27 @@ const RestaurantView = ({navigation, restaurant, userId}) => {
                         selectionColor={colors.black}
                         blurOnSubmit={true}
                         placeholder={'Algo que aclarar?'}
-                        placeholderTextColor={colors.gray}>
+                        placeholderTextColor={colors.gray}
+                        onChangeText={(text) => setAclaration(text)}>
+                        
                     </TextInput>
                 </View>
 
                 <TouchableOpacity style={styles.confirmButton} onPress={() => {
-                    SendReservation(restaurant.id_restaurant, userId)
-
+                    navigation.navigate('ReservationConfirmation', { 
+                      reservationBody: {
+                      "cantidad_personas": numberOfPeople,
+                      "hora_reserva": datetime.toISOString(),
+                      "aclaracion": aclaration ? aclaration : 'Ninguna',
+                      "id_cliente": userId
+                      },
+                      restaurantId: restaurant.id_restaurante,
+                      sendAnimation: sendAnimation,
+                      errorAnimation: errorAnimation,
+                      loadAnimation: loadAnimation
+                    })
                 }}> 
+
                     <Text style={[styles.buttonText, {color: colors.white}]}>Confirmar reserva</Text>
                 </TouchableOpacity>
         </View>)
@@ -189,7 +181,7 @@ const RestaurantView = ({navigation, restaurant, userId}) => {
     return(
         <MainView statusColor={'dark-content'} safeAreaTopColor={colors.white} safeAreaBottomColor={colors.red}>
             <View style={styles.container}>
-                <RestaurantInfoViewV2 restaurant={restaurantsMapInfo.restaurants[0]} navigation={navigation}/>
+                <RestaurantInfoViewV2 restaurant={restaurant} navigation={navigation}/>
                 <View style={styles.reserveView}>
                     <TouchableOpacity style={styles.button} onPress={() => {modal.current.showFull()}}> 
                         <Text style={styles.buttonText}>Reservar</Text>

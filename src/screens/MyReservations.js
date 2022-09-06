@@ -53,11 +53,9 @@ const MyReservationsView = ({userId}) => {
                 <Text style={styles.title}>Mis Reservas</Text>
                 <View style={styles.titleLine}/>
             </View>
-
-
-
+            <View style={styles.scrollContainer}>
             <ScrollView style={styles.reservationScroll}>
-                <View style={{width: '100%', height: '4%'}}/>
+                <View style={{width: '100%', height: '0.5%'}}/>
                 {reservations ? reservations.map(reservation => (
                 <View style={styles.reservationContainer} key={reservation.id_reserva}>
 
@@ -103,8 +101,60 @@ const MyReservationsView = ({userId}) => {
 
                 </View>
                 )) : null}
-
+                <View style={{width: '100%', height: 15}}/>
             </ScrollView>
+            
+            </View>
+
+
+            {/* <ScrollView style={styles.reservationScroll}>
+                <View style={{width: '100%', height: '0.5%'}}/>
+                {reservations ? reservations.map(reservation => (
+                <View style={styles.reservationContainer} key={reservation.id_reserva}>
+
+                    <View style={[styles.restaurantFrame, {marginLeft: '2.5%'}]}>
+                        <Image source={require("../../assets/testbuti.jpg")} style={styles.restaurantImage}/>
+                    </View>
+
+                    <View style={{backgroundColor: colors.white, width: '70%', height: '90%', flexDirection: 'column'}}>
+
+                    
+                        <View style={{width: '95%', height: '20%', borderBottomWidth: 2, marginTop: '5.5%'}}>
+                            <Text adjustsFontSizeToFit numberOfLines={2} style={[styles.heavyText,
+                            {
+                                width: '90%',
+                                marginLeft: '2%'
+                            }
+                            ]}>
+                                Reserva n* {reservation.id_reserva}
+                            </Text>
+                        </View>
+
+                        <View style={{flex: 1}}>
+                            <View style={{width: '100%', height: '8%'}}/>
+                            <View style={styles.textRow}>
+                                <Text style={[styles.mediumText, {width: '45%', marginLeft: '2%'}]}>
+                                    Hora: {stringToTime(reservation.hora_reserva)}
+                                </Text>
+                                <Text style={[styles.mediumText, {width: '60%', marginLeft: '2%'}]}>
+                                    Fecha: {stringToDate(reservation.hora_reserva)}
+                                </Text>
+                            </View>
+                            <View style={{width: '100%', height: '10%'}}/>
+                            <View style={styles.textRow}>
+                                <Text style={[styles.mediumText, {width: '45%', marginLeft: '2%'}]}>
+                                    N* de sillas: {reservation.cantidad_personas}
+                                </Text>
+                                <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.mediumText, {width: '55%', marginLeft: '2%'}]}>
+                                    Estado: {reservation.status}
+                                </Text>
+                            </View>
+                        </View>
+                    </View>
+
+                </View>
+                )) : null}
+            </ScrollView> */}
 
         </View>
     )
@@ -141,6 +191,10 @@ const styles = StyleSheet.create({
         width: '25%',
         height: '3%',
         backgroundColor: colors.white,
+    },
+    scrollContainer: {
+        width: '100%',
+        height: '87.5%',
     },
     reservationScroll: {
         flexGrow: 1,

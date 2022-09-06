@@ -8,6 +8,11 @@ import { colors } from '../utils/colors';
 
 const RawMap = ({restaurant}) => {
 
+    const [location, setLocation] = useState({
+        latitude: restaurant.latitude,
+        longitude: restaurant.longitude
+    });
+
     const [initialRegion, setInitialRegion] = useState({
         latitude: 0,
         longitude: 0,
@@ -17,8 +22,8 @@ const RawMap = ({restaurant}) => {
 
     useEffect(() =>{
         setInitialRegion({
-            latitude: restaurant.cords.latitude,
-            longitude: restaurant.cords.longitude,
+            latitude: restaurant.latitude,
+            longitude: restaurant.longitude,
             latitudeDelta: 0.01,
             longitudeDelta: 0.01
         })
@@ -30,7 +35,7 @@ const RawMap = ({restaurant}) => {
         showsUserLocation={true}
         zoomTapEnabled={false} pitchEnabled={false} rotateEnabled={false} zoomControlEnabled={false} scrollEnabled={false}
         initialRegion={initialRegion}>
-            <Marker coordinate={restaurant.cords}/>
+            <Marker coordinate={location}/>
         </MapView>
     );
 };

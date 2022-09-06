@@ -1,15 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Image, TouchableOpacity, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //----------------------------------------------------------\\
+import MainView from '../components/MainView'
 import DiscoveryView from '../screens/Discovery';
 import MyReservationsView from '../screens/MyReservations';
-import Map from '../components/Map';
-import { foodCategories } from '../utils/categories';
+import { verticalScale } from '../utils/scaling';
 import { colors } from '../utils/colors';
-import MainView from '../components/MainView'
-import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -21,16 +18,27 @@ const userPressed = require("../../assets/icons/statusBar/user-pressed.png")
 const reserves = require("../../assets/icons/statusBar/reserves.png")
 const reservesPressed = require("../../assets/icons/statusBar/reserves-pressed.png")
 
-const HomeView = ({navigation}) => {
-    const [currentScreen, setCurrentScreen] = useState('Discovery');
+const HomeView = ({route, navigation}) => {
+
+    //const { screenToGo } = route.params;
+
     const [topColor, setTopColor] = useState(colors.red);
     const [bottomColor, setBottomColor] = useState(colors.red);
     const [statusTheme, setStatusTheme] = useState('light-content');
-    const [user_id, setUser_id] = useState(null);
 
+    const [currentScreen, setCurrentScreen] = useState('Discovery');
     const [hidesStatusBar, setHidesStatusBar] = useState(false);
 
+    const [user_id, setUser_id] = useState(null);
+
     useEffect(() => {
+        if (route.params){ 
+            console.log('route.params: ' + route.params.screenToGo);
+            setCurrentScreen(route.params.screenToGo);
+            setTopColor(colors.bone);
+            setStatusTheme('dark-content');
+        }
+        
         getData('user_id')
     },[])
 
@@ -112,25 +120,18 @@ const styles = StyleSheet.create({
     statusBarView: {
         backgroundColor: colors.red,
         width: '100%',
-        height: '10%',
+        height: '9%',
     },
     statusBar: {
         flexDirection:'row',
-        justifyContent: 'space-around',
+        justifyContent: 'space-evenly',
         alignItems: 'center',
         height: '100%',
     },
     icon: {
         aspectRatio: 1,
-        height: RFValue(27),
+        height: verticalScale(23),
     },
-    searchIcon:{
-        width: 24,
-        height: 24
-    },
-    touchableButton: {
-        
-    }
 
 });
 

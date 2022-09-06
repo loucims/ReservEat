@@ -15,14 +15,37 @@ const windowHeight = Dimensions.get('window').height;
 const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
 
     const [currentScreen, setCurrentScreen] = useState(1)
+    const [menuItems, setMenuItems] = useState()
+
+    useEffect(() => {
+        FetchMenu({restaurantId: restaurant.id_restaurante})
+    },[])
+
+
+    const FetchMenu = ({restaurantId}) => {
+        var requestOptions = {
+            method: 'GET',
+            redirect: 'follow'
+        };
+
+        console.log(restaurantId)
+          
+        fetch(`https://reserv-eat-backend.vercel.app/restaurantes/${restaurantId}/menu`, requestOptions)
+        .then(response => response.json()).then(result => {
+
+            console.log('Menu:',result)
+            setMenuItems(result)
+
+        }).catch(error => console.log('error', error));
+    }
 
     const RenderCurrentView = () => {
         switch(currentScreen) {
             case 1:
                 return(
                 <>
-                    {menuItems.items.map(item => (
-                    <View key={item.name} style={styles.menuItemContainer}>
+                    {menuItems ? menuItems.map(item => (
+                    <View key={item.nombre} style={styles.menuItemContainer}>
                         <View style={[styles.header, {flexDirection: 'row', paddingBottom: '0%'}]}>
                             <View style={[styles.iconContainer , {borderColor: colors.red}]}>
                                 <Image source={require("../../assets/testbuti.jpg")} style={styles.restaurantIcon}/>
@@ -31,18 +54,18 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
                             <View style={[styles.titleLine , {backgroundColor: colors.red, width: '80%', position: 'absolute', left: '20%', top:'97.3%'}]}/>
                             <View style={{flex: 1}}>
                                 <Text adjustsFontSizeToFit numberOfLines={1} style={{fontFamily: 'Aveni-Heavy',fontSize: scale(15), paddingLeft: '4%', paddingTop: '2/3%', paddingBottom: '1.3%'}}>
-                                    {item.name}
+                                    {item.nombre}
                                 </Text>
     
                                 <Text adjustsFontSizeToFit numberOfLines={3} style={{fontFamily: 'Aveni-Medium',fontSize: scale(13), paddingLeft: '4%'}}>
                                     {item.descripcion}
                                 </Text>
                                 <Text adjustsFontSizeToFit  numberOfLines={1} style={{fontFamily: 'Aveni-Heavy',fontSize: scale(13), alignSelf: 'flex-end', marginTop: 'auto', padding: '2%', paddingRight: '5%'}}>
-                                    1000$
+                                    {item.precio}
                                 </Text>
                             </View>
                         </View>
-                    </View>))}
+                    </View>)) : null}
                     <View style={{height: 10}}/>
                 </>
                 )
@@ -53,8 +76,8 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
                         <View style={[styles.locationInfoContainer]}>
                             <View style={{width: '95%', height: '90%', alignSelf: 'center', justifyContent: 'space-evenly'}}>
                                 <View style={{backgroundColor: colors.white, width: ' 100%', height: '45%', flexDirection: 'row', alignItems: 'center'}}>
-                                    <View style={{backgroundColor: colors.black, height: '90%', aspectRatio: 1, marginRight: '5%'}} source={require("../../assets/icons/statusBar/map-pressed.png")}>
-                                        <Image source={require("../../assets/icons/statusBar/map-pressed.png")} style={{
+                                    <View style={{height: '90%', aspectRatio: 1, marginRight: '5%'}} source={require("../../assets/icons/statusBar/map-pressed.png")}>
+                                        <Image source={require("../../assets/icons/marker-solid.png")} style={{
                                             flex: 1,
                                             width: null,
                                             height: null,
@@ -71,8 +94,8 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
                                     </Text>
                                 </View>
                                 <View style={{backgroundColor: colors.white, width: ' 100%', height: '45%', flexDirection: 'row', alignItems: 'center'}}>
-                                    <View style={{backgroundColor: colors.black, height: '90%', aspectRatio: 1, marginRight: '5%'}} source={require("../../assets/icons/statusBar/map-pressed.png")}>
-                                            <Image source={require("../../assets/icons/statusBar/reserves-pressed.png")} style={{
+                                    <View style={{height: '90%', aspectRatio: 1, marginRight: '5%'}} source={require("../../assets/icons/statusBar/map-pressed.png")}>
+                                            <Image source={require("../../assets/icons/phone-call-solid.png")} style={{
                                                 flex: 1,
                                                 width: null,
                                                 height: null,
@@ -119,7 +142,7 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
 
                     <View style={styles.backButtonContainer}>
                         <TouchableOpacity style={{width: '100%', height: '100%', backgroundColor: 'rgba(255, 255, 255, 0.7)', borderRadius: 99, alignItems: 'center', justifyContent: 'center'}}
-                        onPress={() =>{navigation.goBack();}}>
+                        onPress={() =>{navigation.pop();}}>
                             <Image source={require("../../assets/icons/left-arrow.png")} style={{width: scale(10), height: scale(15)}}/>
                         </TouchableOpacity>
                     </View>
@@ -129,7 +152,7 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
                             <Image source={require("../../assets/testbuti.jpg")} style={styles.restaurantIcon}/>
                         </View>
                         <View style={styles.titleContainer}>
-                            <Text style={styles.restaurantTitle}>Producciones Buti</Text>
+                            <Text style={styles.restaurantTitle}>{restaurant.nombre}</Text>
                             <View style={styles.titleLine}/>
                         </View>
                     </View>
@@ -147,7 +170,7 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
                     </View>
                     <View style={styles.infoSection}>
                         <Text style={{fontFamily: 'Aveni-Medium',fontSize: moderateScale(15, 0.2)}}>
-                            Cierra a las tal y tal
+                            Cierra a las {restaurant.horario_clausura}
                         </Text>
                     </View>
                 </View>
