@@ -54,9 +54,20 @@ const HomeView = ({route, navigation}) => {
         }
     }
 
+    const removeItemValue = async (key) => {
+        try {
+            await AsyncStorage.removeItem(key);
+            return true;
+        }
+        catch(exception) {
+            return false;
+        }
+    }
+
     const RenderCurrentView = () => {
         switch(currentScreen){
             case 'User':
+                removeItemValue('user_id')
                 break
             case 'Discovery':
                 return(<DiscoveryView userId={user_id} navigation={navigation} showStatus={showStatusBar} hideStatus={hideStatusBar}/>)

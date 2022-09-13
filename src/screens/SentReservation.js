@@ -22,6 +22,7 @@ const ReservationConfirmation = ({ route, navigation }) => {
     const [succesful, setSuccesful] = useState();
     const [loading, setLoading] = useState(true);
     const [sent, setSent] = useState(false);
+    const [errored, setErrored] = useState(false);
 
     const rippleAnim = useRef(new Animated.Value(0.1)).current
     const fontAnim = useRef(new Animated.Value(RFValue(25))).current
@@ -44,7 +45,7 @@ const ReservationConfirmation = ({ route, navigation }) => {
             redirect: 'follow'
         };
         
-        fetch(`http://localhost:8080/restaurantes/${restaurantId}/reserva`, requestOptions)
+        fetch(`https://reserv-eat-backend.vercel.app/restaurantes/${restaurantId}/reserva`, requestOptions)
         .then(response => response.text())
         .then(result => {
             console.log(result);
@@ -105,7 +106,7 @@ const ReservationConfirmation = ({ route, navigation }) => {
                   easing: Easing.bouncer,
                   useNativeDriver: false,
                 })]).start(() => {
-                  navigation.replace('Home', {screenToGo: 'Reservations', statusTheme: 'dark-content', topSafeAreaColor: colors.bone})
+                  navigation.replace('Home')
                 })
         }}/>}
 
@@ -117,6 +118,7 @@ const ReservationConfirmation = ({ route, navigation }) => {
             loop={false}
             speed={0.8}
             onAnimationFinish={() => {
+              setErrored(true);
               Animated.sequence([                
                 Animated.timing(fontAnim, {                      
                 toValue: 0.1,
@@ -141,7 +143,7 @@ const ReservationConfirmation = ({ route, navigation }) => {
 
         <Animated.View style={[styles.ripple, {transform: [{scale: rippleAnim}], backgroundColor: succesful ? colors.red : '#FF413A' }]}/>
         {sent && <Text style={styles.splashText}>Reserva enviada!</Text>}
-        {!succesful && <Animated.Text style={[styles.errorText, {top: '20%', fontSize: fontAnim}]}>Ha ocurrrido un error..</Animated.Text>}
+        {errored && <Animated.Text style={[styles.errorText, {top: '20%', fontSize: fontAnim}]}>Ha ocurrrido un error..</Animated.Text>}
 
       </View>
     </MainView>
