@@ -78,8 +78,9 @@ const MyReservationsView = ({userId}) => {
             </View>
             <View style={styles.scrollContainer}>
             <ScrollView style={styles.reservationScroll}>
-                <View style={{width: '100%', height: '0.5%'}}/>
-                {reservations ? reservations.map(reservation => (
+                <View style={{width: '100%', height: '5%'}}/>
+                {reservations && 
+                reservations.length > 0 ? reservations.map(reservation => (
                 <View style={styles.reservationContainer} key={reservation.id_reserva}>
 
                     <View style={[styles.restaurantFrame, {marginLeft: '2.5%'}]}>
@@ -123,7 +124,12 @@ const MyReservationsView = ({userId}) => {
                     </View>
 
                 </View>
-                )) : null}
+                )) : 
+                <Text style={{fontSize: RFValue(15), color: colors.gray, textAlign: 'center', 
+                marginTop: '10%', fontFamily: 'Aveni-Heavy'}}>
+                    Aun no has hecho una reserva!
+                </Text>
+                }
                 <View style={{width: '100%', height: 15}}/>
             </ScrollView>
             
