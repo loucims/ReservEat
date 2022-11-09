@@ -54,8 +54,32 @@ const RegisterView = ({navigation}) =>{
         .then((response) => {
             if (response.status === 200){
                 setError('');
-                storeData({id: response.id_cliente.toString(), token: response.token})
-                navigation.navigate('Home')
+                var myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
+        
+                fetch('http://localhost:8080/clientes/login', {
+                    method: 'POST',
+                    headers: myHeaders,
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                })
+                .then(handleErrors)
+                .then((response) => {
+                    console.log(JSON.stringify(response))
+                    if (response.status === 200){
+                        response.json().then(data => {
+                            console.log(data)
+                            storeData({id: data.id_cliente.toString(), token: data.token})
+                            setError('');
+                            navigation.navigate('Home')
+                        });
+                    }
+                }).catch(error => {
+                    console.log('error verifying credentials', JSON.stringify(error))
+                    setError('Algo salió mal, intente nuevamente');
+                })
             }
         }).catch(error => {
             console.log('error creating account:', JSON.stringify(error))
