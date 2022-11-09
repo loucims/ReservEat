@@ -1,4 +1,5 @@
 //import { StatusBar } from 'expo-status-bar';
+import './src/utils/ignoreWarnings';
 import React from 'react';
 import { StyleSheet, SafeAreaView, Platform, StatusBar as StatusBarNative, View , Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -13,7 +14,7 @@ import HomeView from './src/views/Home';
 import RestaurantView from './src/views/Restaurant';
 import ReservationConfirmation from './src/screens/SentReservation';
 import MainView from './src/components/MainView';
-import TestScreen from './src/views/TestScreen';
+// import TestScreen from './src/views/TestScreen';
 
 const Stack = createNativeStackNavigator()
 

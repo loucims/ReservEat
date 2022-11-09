@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 //----------------------------------------------------------\\
 import { colors } from '../utils/colors';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
+import handleErrors from '../utils/errorHandling';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -11,6 +13,7 @@ const windowWidth = Dimensions.get('window').width;
 const MyReservationsView = ({userId}) => {
 
     const [reservations, setReservations] = useState();
+    const [session, setSession] = useState(null);
 
     useEffect(() => {
         GetReservations({id: userId})
@@ -19,18 +22,38 @@ const MyReservationsView = ({userId}) => {
     }
     ,[])
 
+    const getSession = async () => {
+        const value = await AsyncStorage.getItem('user_id')
+        const token = await AsyncStorage.getItem('token')
+        return {id: value, token: token}
+    }
 
-    const GetReservations = ({id}) => {
+
+    useEffect(() => {
+        getSession().then((session) => {
+            setSession(session)
+            GetReservations({id: session.id, token: session.token})
+        })
+    },[])
+
+
+    const GetReservations = ({id, token}) => {
         //Get request to get reservations given the user id
-        fetch(`https://reserv-eat-backend.vercel.app/clientes/${id}/reservas`, {
-                method: 'GET',
-                body: '',
-                redirect: 'follow'
-        }).then(response => response.json()).then(result => {
+        fetch(`http://localhost:8080/clientes/${id}/reservas`, {
+            method: 'GET',
+            body: '',
+            redirect: 'follow',
+            headers: {
+                'Content-Type': 'application/json',
+                'access-token': token
+            }
+        })
+        .then(handleErrors)
+        .then(response => response.json()).then(result => {
             console.log(result)
             setReservations(result)
         }).catch(error => {
-            console.log('error',error)
+            console.log('error', JSON.stringify(error))
         })
     }
 

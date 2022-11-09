@@ -6,6 +6,7 @@ import LottieView from 'lottie-react-native';
 import { colors } from '../utils/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RFValue } from 'react-native-responsive-fontsize';
+import handleErrors from '../utils/errorHandling';
 
 const errorAnimation = require('../../assets/animations/error.json')
 const sendAnimation = require('../../assets/animations/sent-reservation.json')
@@ -27,25 +28,42 @@ const ReservationConfirmation = ({ route, navigation }) => {
     const rippleAnim = useRef(new Animated.Value(0.1)).current
     const fontAnim = useRef(new Animated.Value(RFValue(25))).current
 
+    const [session, setSession] = useState(null)
+
+
+    const getSession = async () => {
+      const value = await AsyncStorage.getItem('user_id')
+      const token = await AsyncStorage.getItem('token')
+      return {id: value, token: token}
+  }
+
     useEffect(() => {
-        postReservation({reservationRaw: reservationBody, restaurantId: restaurantId})
+        getSession().then((sessionInfo) => {
+            setSession(sessionInfo)
+            reservationBody.id_cliente = sessionInfo.id
+        })
     },[])
+
+    useEffect(() => {
+      if (session != null) postReservation({reservationRaw: reservationBody, restaurantId: restaurantId})
+    }, [session])
 
     const postReservation = async ({reservationRaw, restaurantId}) => {
 
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        
         var raw = JSON.stringify(reservationRaw);
 
         var requestOptions = {
             method: 'POST',
-            headers: myHeaders,
+            headers: {
+                'Content-Type': 'application/json',
+                'access-token': session.token
+            },
             body: raw,
             redirect: 'follow'
         };
         
-        fetch(`https://reserv-eat-backend.vercel.app/restaurantes/${restaurantId}/reserva`, requestOptions)
+        fetch(`http://localhost:8080/restaurantes/${restaurantId}/reserva`, requestOptions)
+        .then(handleErrors)
         .then(response => response.text())
         .then(result => {
             console.log(result);
@@ -54,9 +72,10 @@ const ReservationConfirmation = ({ route, navigation }) => {
             sentAnim.current?.play();
         })
         .catch(error => {
-            console.log('error', error);
+            console.log('error', JSON.stringify(error));
             setLoading(false);
             setSuccesful(false);
+            setErrored(true);
             errorAnim.current?.play();
         });
     }
@@ -118,18 +137,17 @@ const ReservationConfirmation = ({ route, navigation }) => {
             loop={false}
             speed={0.8}
             onAnimationFinish={() => {
-              setErrored(true);
               Animated.sequence([                
                 Animated.timing(fontAnim, {                      
                 toValue: 0.1,
                 duration: 150,
-                easing: Easing.bouncer,
+                easing: Easing.bounce,
                 useNativeDriver: false,
               }),
                 Animated.timing(rippleAnim, {                      
                 toValue: 150,
                 duration: 500,
-                easing: Easing.bouncer,
+                easing: Easing.bounce,
                 useNativeDriver: false,
               }),
               Animated.timing(rippleAnim, {                      
@@ -143,7 +161,7 @@ const ReservationConfirmation = ({ route, navigation }) => {
 
         <Animated.View style={[styles.ripple, {transform: [{scale: rippleAnim}], backgroundColor: succesful ? colors.red : '#FF413A' }]}/>
         {sent && <Text style={styles.splashText}>Reserva enviada!</Text>}
-        {errored && <Animated.Text style={[styles.errorText, {top: '20%', fontSize: fontAnim}]}>Ha ocurrrido un error..</Animated.Text>}
+        {errored && <Animated.Text style={[styles.errorText, {top: '20%', fontSize: fontAnim, zIndex: 1}]}>Ha ocurrrido un error..</Animated.Text>}
 
       </View>
     </MainView>

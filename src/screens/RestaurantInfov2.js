@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity, Dimensions, ImageBackground } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 //----------------------------------------------------------\\
 import RawMap from '../components/BareMap';
@@ -7,6 +8,7 @@ import { menuItems } from '../utils/menuItems';
 import { colors } from '../utils/colors';
 import { scale, verticalScale, moderateScale } from '../utils/scaling';
 import { restaurantsMapInfo } from '../utils/coordinates';
+import handleErrors from '../utils/errorHandling';
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -16,27 +18,47 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
 
     const [currentScreen, setCurrentScreen] = useState(1)
     const [menuItems, setMenuItems] = useState()
+    const [session, setSession] = useState(null)
+
+    const getSession = async () => {
+        const value = await AsyncStorage.getItem('user_id')
+        const token = await AsyncStorage.getItem('token')
+        return {id: value, token: token}
+    }
 
     useEffect(() => {
-        FetchMenu({restaurantId: restaurant.id_restaurante})
+        getSession().then((session) => {
+            setSession(session)
+        })
     },[])
 
+    useEffect(() => {
+        if (session){
+            console.log(session)
+            fetchMenu({restaurantId: restaurant.id_restaurante})
+        }
+    }, [session])
 
-    const FetchMenu = ({restaurantId}) => {
+    const fetchMenu = ({restaurantId}) => {
         var requestOptions = {
             method: 'GET',
-            redirect: 'follow'
+            redirect: 'follow',
+            headers: {
+                'Content-Type': 'application/json',
+                'access-token': session.token
+            }
         };
 
         console.log(restaurantId)
           
-        fetch(`https://reserv-eat-backend.vercel.app/restaurantes/${restaurantId}/menu`, requestOptions)
+        fetch(`http://localhost:8080/restaurantes/${restaurantId}/menu`, requestOptions)
+        .then(handleErrors)
         .then(response => response.json()).then(result => {
 
             console.log('Menu:',result)
             setMenuItems(result)
 
-        }).catch(error => console.log('error', error));
+        }).catch(error => console.log('error', JSON.stringify(error)));
     }
 
     const RenderCurrentView = () => {
@@ -118,7 +140,9 @@ const RestaurantInfoViewV2 = ({restaurant, navigation}) => {
             case 3:
                 return (
                 <View style={styles.ratingsContainer}>
-                    <Image style={[styles.starIcon,{backgroundColor: colors.black}]}/>
+                    <View>
+                        <Image source={require("../../assets/icons/kisspng-computer-icons-star-5-star-5acdd9ec825583.7895576015234401085339.png")} style={[styles.starIcon]}/>
+                    </View>
                     <View style={styles.ratingTextContainer}>
                         <Text style={styles.ratings}>
                             4,5
@@ -343,6 +367,7 @@ const styles = StyleSheet.create({
     //Location of restaurant
     locationContainer: {
         height: 0.75 * windowHeight,
+        flex: 1,
         width: '100%',
         justifyContent: 'flex-end'
     },
@@ -379,9 +404,9 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     starIcon: {
-        height: '70%',
+        height: '55%',
         aspectRatio: 1,
-        marginRight: '5%'
+        marginRight: '3%',
     },
     ratingTextContainer: {
         width: '45%',

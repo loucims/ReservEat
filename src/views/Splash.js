@@ -5,6 +5,7 @@ import LottieView from 'lottie-react-native';
 import { colors } from '../utils/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RFValue } from 'react-native-responsive-fontsize';
+import handleErrors from '../utils/errorHandling';
 
 const SplashView = ({ navigation }) =>{
 
@@ -29,31 +30,37 @@ const SplashView = ({ navigation }) =>{
     ).start();
   }, [zoomAnim])
 
-  const getPersistentSession = async (key) => {
+  const getPersistentSession = async () => {
     try {
-      const value = await AsyncStorage.getItem(key)
-      if(value !== null) {
+      const value = await AsyncStorage.getItem('user_id')
+      const token = await AsyncStorage.getItem('token')
+      if(value !== null && token !== null) {
           console.log("user_id logged: " + value)
+          console.log("token logged " + token)
 
           var requestOptions = {
             method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'access-token': token
+            },
             redirect: 'follow'
           };
-          return await fetch(`https://reserv-eat-backend.vercel.app/clientes/${value}`, requestOptions)
+          return await fetch(`http://localhost:8080/clientes/${value}`, requestOptions)
+          .then(handleErrors)
           .then(response => response.json())
           .then(result => {
-            console.log(result)
+            console.log("Recovered session")
             return 'Home'
             // value previously stored, and has connectivity
           })
           .catch(error => {
-            console.log('error fetching info')
+            console.log('error fetching info: ', JSON.stringify(error));
             return 'LogIn'
-            //value previously stored, but no connectivity
           });
 
       } else {
-          console.log("user_id not logged")
+          console.log("user_id or token not logged")
           return 'LogIn'
           // value not there
       }

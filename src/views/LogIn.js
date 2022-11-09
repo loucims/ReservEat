@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,6 +7,7 @@ import MainView from '../components/MainView';
 import { colors } from '../utils/colors';
 import { scale, moderateScale, verticalScale} from '../utils/scaling';
 import { RFValue } from 'react-native-responsive-fontsize';
+import handleErrors from '../utils/errorHandling';
 
 const LogInView = ({navigation}) =>{
     const [username, setUsername] = useState("");
@@ -15,15 +15,19 @@ const LogInView = ({navigation}) =>{
 
     const [error, setError] = useState('');    
 
-    const storeData = async (value) => {
+    
+
+    const storeData = async ({ id, token }) => {
         try {
-            await AsyncStorage.setItem('user_id', value)
-            console.log('Storing')
+            console.log('Storing id: ' + id + ' and token: ' + token)
+            await AsyncStorage.setItem('user_id', id)
+            await AsyncStorage.setItem('token', token)
+            console.log('Stored')
         } catch (e) {
           // saving error
         }
-      }
-
+    }
+    
     const verifyCredentials = () =>{
         if (username === '' || password === ''){
             setError('Por favor, ingrese su email y contraseña');
@@ -33,7 +37,7 @@ const LogInView = ({navigation}) =>{
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
-        fetch('https://reserv-eat-backend.vercel.app/clientes/login', {
+        fetch('http://localhost:8080/clientes/login', {
             method: 'POST',
             headers: myHeaders,
             body: JSON.stringify({
@@ -41,20 +45,30 @@ const LogInView = ({navigation}) =>{
                 password: password
             })
         })
+        .then(handleErrors)
         .then((response) => {
+            console.log(JSON.stringify(response))
             if (response.status === 200){
-                response.json().then(data => {storeData(data.id_cliente.toString())});
-                setError('');
-                navigation.navigate('Home')
-            } else {
-                setError('Usuario o contraseña incorrectos');
+                response.json().then(data => {
+                    console.log(data)
+                    storeData({id: data.id_cliente.toString(), token: data.token})
+                    setError('');
+                    navigation.navigate('Home')
+                });
             }
         }).catch(error => {
-            console.log('error verifying credentials',error)
-            setError('Algo salió mal, intente nuevamente');
-        }).done();
+            console.log('error verifying credentials', JSON.stringify(error))
+            if (error.status === 401){
+                setError('Usuario o contraseña incorrectos');
+            } else {
+                setError('Algo salió mal, intente nuevamente');
+            }
+        })
     }
-    
+
+
+
+
     return (
         <MainView statusColor={'dark-content'} safeAreaTopColor={colors.red} safeAreaBottomColor={colors.red}>
             <View style={styles.container}>

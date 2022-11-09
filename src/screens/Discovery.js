@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { StyleSheet, View, Image, Text, TextInput, ScrollView, TouchableOpacity, Dimensions, Animated, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 //----------------------------------------------------------\\
 import Map from '../components/Map';
 import { colors } from '../utils/colors';
 import { foodCategories } from '../utils/categories';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import { verticalScale } from '../utils/scaling';
+import handleErrors from '../utils/errorHandling';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -17,20 +19,40 @@ const DiscoveryView = ({navigation, userId, showStatus, hideStatus}) => {
     const [placeholder, setPlaceholder] = useState('Buscar..');
     const [restaurants, setRestaurants] = useState([]);
     const [focused, setFocused] = useState(false);
+    const [session, setSession] = useState(null);
+
+    const getSession = async () => {
+        const value = await AsyncStorage.getItem('user_id')
+        const token = await AsyncStorage.getItem('token')
+        return {id: value, token: token}
+    }
+
 
     useEffect(() => {
+        getSession().then((session) => {
+            setSession(session)
+        })
+    },[])
+
+    useEffect(() => {
+        if (searchField.length > 0){
         var requestOptions = {
             method: 'GET',
-            redirect: 'follow'
+            redirect: 'follow',
+            headers: {
+                'Content-Type': 'application/json',
+                'access-token': session.token,
+            }
         };
         var param = searchField
         if (param == ''){param = '*'}
 
-        fetch(`https://reserv-eat-backend.vercel.app/restaurantes/containing/${param}`, requestOptions)
+        fetch(`http://localhost:8080/restaurantes/containing/${param}`, requestOptions)
+        .then(handleErrors)
         .then(response => response.json()).then(result => {
-                console.log(result)
+                console.log(JSON.stringify(result))
                 setRestaurants(result)
-        }).catch(error => console.log('error', error));
+        }).catch(error => console.log('error', JSON.stringify(error)));}
     },[searchField])
 
     return (

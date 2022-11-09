@@ -28,31 +28,27 @@ const HomeView = ({route, navigation}) => {
     const [hidesStatusBar, setHidesStatusBar] = useState(false);
 
     const [user_id, setUser_id] = useState(null);
+    const [session, setSession] = useState(null);
 
     useEffect(() => {
         if (route.params){ 
-            console.log('route.params: ' + route.params.screenToGo);
+            // console.log('route.params: ' + route.params.screenToGo);
             setCurrentScreen(route.params.screenToGo);
             setTopColor(route.params.topSafeAreaColor);
             setStatusTheme(route.params.statusTheme);
         }
         
-        getData('user_id')
+        getSession().then((result) => {
+            setSession(result)
+        })
     },[])
 
-    const getData = async (key) => {
-        try {
-        const value = await AsyncStorage.getItem(key)
-        if(value !== null) {
-            setUser_id(parseInt(value))
-            console.log(value)
-            // value previously stored
-        }
-        } catch(e) {
-            console.log(e)
-        // error reading value
-        }
+    const getSession = async () => {
+        const value = await AsyncStorage.getItem('user_id')
+        const token = await AsyncStorage.getItem('token')
+        return {id: value, token: token}
     }
+
 
     const removeItemValue = async (key) => {
         try {

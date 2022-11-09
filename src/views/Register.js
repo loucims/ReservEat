@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-nativ
 import { colors } from '../utils/colors';
 import MainView from '../components/MainView';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import handleErrors from '../utils/errorHandling';
 
 const RegisterView = ({navigation}) =>{
     const [username, setUsername] = useState("");
@@ -14,6 +16,17 @@ const RegisterView = ({navigation}) =>{
 
     const mediumText = RFValue(17);
     const smallText = RFValue(16);
+
+    const storeData = async ({ id, token }) => {
+        try {
+            console.log('Storing id: ' + id + ' and token: ' + token)
+            await AsyncStorage.setItem('user_id', id)
+            await AsyncStorage.setItem('token', token)
+            console.log('Stored')
+        } catch (e) {
+          // saving error
+        }
+    }
 
     const validateRegister = () =>{
         if (username === '' || email === '' || password === '' || passConfirm === ''){
@@ -28,7 +41,7 @@ const RegisterView = ({navigation}) =>{
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
-        fetch('https://reserv-eat-backend.vercel.app/clientes', {
+        fetch('http://localhost:8080/clientes', {
             method: 'POST',
             headers: myHeaders,
             body: JSON.stringify({
@@ -36,16 +49,21 @@ const RegisterView = ({navigation}) =>{
                 email: email,
                 password: password
             })
-        }).then((response) => {
+        })
+        .then(handleErrors)
+        .then((response) => {
             if (response.status === 200){
                 setError('');
+                storeData({id: response.id_cliente.toString(), token: response.token})
                 navigation.navigate('Home')
-            } else if (response.status === 409) {
-                setError('El email ya está registrado');
             }
         }).catch(error => {
-            console.log('error creating account',error)
-            setError('Algo salió mal, intente nuevamente');
+            console.log('error creating account:', JSON.stringify(error))
+            if (error.status == 409) {
+                setError('El email ya está registrado');
+            } else {
+                setError('Algo salió mal, intente nuevamente');
+            }
         }).done();
 
     }
