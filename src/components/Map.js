@@ -3,11 +3,11 @@ import { StyleSheet, View, Image, Text } from 'react-native';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from 'expo-location';
 //----------------------------------------------------------\\
-import { restaurantsMapInfo } from '../utils/coordinates';
+// import { restaurantsMapInfo } from '../utils/coordinates';
 import { mainMapStyle } from '../utils/mapStyle';
 import { colors } from '../utils/colors';
 
-const Map = ({navigation}) => {
+const Map = ({restaurantsMapInfo, navigation}) => {
 
     const [initialRegion, setInitialRegion] = useState({
         latitude: 0,
@@ -20,6 +20,7 @@ const Map = ({navigation}) => {
 
     useEffect(() => {
         locateInitialPos();
+        console.log('Info!', restaurantsMapInfo)
     },[]);
 
     useEffect(() =>{
@@ -65,13 +66,13 @@ const Map = ({navigation}) => {
         customMapStyle={mainMapStyle} style={styles.map} 
         showsUserLocation={true} showsMyLocationButton={true}
         initialRegion={initialRegion}>
-        {restaurantsMapInfo.restaurants.map(restaurant => (
-            <Marker key={restaurant.name} coordinate={restaurant.cords} onPress={() => focusOnMarker(restaurant.cords)}>
+        {restaurantsMapInfo.map(restaurant => (
+            <Marker key={restaurant.id_restaurante} coordinate={{latitude: restaurant.latitude, longitude: restaurant.longitude}} onPress={() => focusOnMarker({latitude: restaurant.latitude, longitude: restaurant.longitude})}>
                 <Callout flexDirection={'row'} alignItems={'center'} onPress={() =>{
                     navigation.navigate("Restaurant", {restaurant});
                 }}>
                     <Image source={require("../../assets/testbuti.jpg")} style={styles.icon}/>
-                    <Text fontFamily={'Aveni-Heavy'}>{restaurant.name}</Text>
+                    <Text fontFamily={'Aveni-Heavy'}>{restaurant.nombre}</Text>
                 </Callout>
             </Marker>
         ))}

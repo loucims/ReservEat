@@ -35,7 +35,7 @@ const DiscoveryView = ({navigation, userId, showStatus, hideStatus}) => {
     },[])
 
     useEffect(() => {
-        if (searchField.length > 0){
+        if (session != null){
         var requestOptions = {
             method: 'GET',
             redirect: 'follow',
@@ -44,15 +44,35 @@ const DiscoveryView = ({navigation, userId, showStatus, hideStatus}) => {
                 'access-token': session.token,
             }
         };
-        var param = searchField
-        if (param == ''){param = '*'}
-
-        fetch(`http://localhost:8080/restaurantes/containing/${param}`, requestOptions)
+        var param = '';
+        fetch(`http://localhost:8080/restaurantes/`, requestOptions)
         .then(handleErrors)
         .then(response => response.json()).then(result => {
                 console.log(JSON.stringify(result))
                 setRestaurants(result)
         }).catch(error => console.log('error', JSON.stringify(error)));}
+    },[session])
+
+    useEffect(() => {
+        if (searchField.length > 0){
+            var requestOptions = {
+                method: 'GET',
+                redirect: 'follow',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'access-token': session.token,
+                }
+            };
+            var param = searchField
+            if (param == ''){param = '*'}
+
+            fetch(`http://localhost:8080/restaurantes/containing/${param}`, requestOptions)
+            .then(handleErrors)
+            .then(response => response.json()).then(result => {
+                    console.log(JSON.stringify(result))
+                    setRestaurants(result)
+            }).catch(error => console.log('error', JSON.stringify(error)));
+        } 
     },[searchField])
 
     return (
@@ -95,7 +115,7 @@ const DiscoveryView = ({navigation, userId, showStatus, hideStatus}) => {
             
             </View>
 
-            <Map navigation={navigation}/>
+            <Map navigation={navigation} restaurantsMapInfo={restaurants}/>
 
             {focused && (
             <View style={{top: '13%', bottom: 0, left: 0, right: 0, backgroundColor: colors.bone, position: 'absolute', height: '100%'}}>
